@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/ri/eclipse-workspace/S24_P1_SkipList_Ref/S24_P1SkipList_starterkit/student.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Blaze/OneDrive/Documents/CS Data Structures/Project 1/S24_P1SkipList_benscoppa/student.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

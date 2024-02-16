@@ -88,6 +88,11 @@ public class Rectangle {
      */
     public boolean intersect(Rectangle r2) {
         
+        // check that r2 is not null
+        if (r2 == null) {
+            return false;
+        }
+        
         // check if the rectangle is right of r2 
         if (xCoordinate >= r2.xCoordinate + r2.width) {
             return false;
@@ -129,18 +134,14 @@ public class Rectangle {
             return true;
         }
         
-        // check that the comparison rectangle is not null
-        if (rec == null) {
-            return false;
-        }
-        
         // make sure rec is a rectangle class object
-        if (getClass() != rec.getClass()) {
+        if (!(rec instanceof Rectangle)) {
             return false;
         }
         
         // compare the cordinates of this rectangle and rec
         Rectangle r2 = (Rectangle) rec;
+        
         
         if (xCoordinate != r2.xCoordinate) {
             return false;
@@ -172,8 +173,9 @@ public class Rectangle {
      */
     public String toString() {
         
-        return String.format("Rectangle Cordinates: (%d, %d), Height: %d, Width: %d", 
-                             xCoordinate, yCoordinate, height, width);
+        return String.format("Rectangle Cordinates: (%d, %d), "
+                             + "Width: %d, Height: %d", 
+                             xCoordinate, yCoordinate, width, height);
     }
 
 
@@ -193,7 +195,8 @@ public class Rectangle {
             return true;
         }
         
-        // make sure the rectangle fits into the 1024 x 1024 worldbox with (0,0) top left
+        // make sure the rectangle fits into the 1024 x 1024 
+        // worldbox with (0,0) top left
         if (xCoordinate < 0) {
             return true;
         }
