@@ -1,3 +1,4 @@
+
 import java.util.regex.Pattern;
 
 /**
@@ -53,6 +54,25 @@ public class CommandProcessor {
         // their Integer equivalent, trimming the whitespace
         if (command.equals("insert")) {
             //Calls insert
+            if (arr.length == 6) { // expected parameters: name x y w h
+                try {
+                    String name = arr[1];
+                    int x = Integer.parseInt(arr[2]);
+                    int y = Integer.parseInt(arr[3]);
+                    int w = Integer.parseInt(arr[4]);
+                    int h = Integer.parseInt(arr[5]);
+                    
+                    // create a rectangle object
+                    Rectangle rect = new Rectangle(x, y, w, h);
+                    KVPair<String, Rectangle> pair = new KVPair<>(name, rect);
+                    data.insert(pair);
+                    
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters for 'insert' command.");
+                }
+            } else {
+                System.out.println("Incorrect number of parameters for 'insert' command.");
+            }
         }
         // calls the appropriate remove method based on the
         // number of white space delimited strings in the line
@@ -61,36 +81,79 @@ public class CommandProcessor {
             int numParam = arr.length - 1;
             if (numParam == 1) {
                 // Calls remove by name
+                String name = arr[1];
+                data.remove(name);
                 
             }
             else if (numParam == 4) {
                 // Calls remove by coordinate, converting string
                 // integers into their Integer equivalent minus whitespace
-                
-            }
-            
+                try {
+                    int x = Integer.parseInt(arr[1]);
+                    int y = Integer.parseInt(arr[2]);
+                    int w = Integer.parseInt(arr[3]);
+                    int h = Integer.parseInt(arr[4]);
+                    
+                    data.remove(x, y, w, h);
+                  
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters for 'remove' command.");
+                }
+            } else {
+                System.out.println("Incorrect number of parameters for 'remove' command.");
+            } 
         }
         else if (command.equals("regionsearch")) {
             // calls the regionsearch method for a set of coordinates
             // the string integers in the line will be trimmed of whitespace
+            if (arr.length == 5) { // expect parameters: x, y, w, h
+                try {
+                    int x = Integer.parseInt(arr[1]);
+                    int y = Integer.parseInt(arr[2]);
+                    int w = Integer.parseInt(arr[3]);
+                    int h = Integer.parseInt(arr[4]);
 
+                    data.regionsearch(x, y, w, h);
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters for 'regionsearch' command.");
+                }
+            } else {
+                System.out.println("Incorrect number of parameters for 'regionsearch' command.");
+            }
         }
         else if (command.equals("intersections")) {
             // calls the intersections method, no parameters to be passed
             // (see the intersections JavaDoc in the Database class for more information)
+            if (arr.length == 1) { // no expected parameters
+                data.intersections();
+            } else {
+                System.out.println("Invalid parameters for 'intersection' command.");
+            }
            
         }
         else if (command.equals("search")) {
-             // calls the search method for a name of object
+            // calls the search method for a name of object
+            if (arr.length == 2) { // expected parameter: name
+                String name = arr[1];
+                data.search(name);
+            } else {
+                System.out.println("Incorrect number of parameters for 'search' command.");
+            }
            
         }
         else if (command.equals("dump")) {
             // calls the dump method for the database, takes no parameters
             // (see the dump() JavaDoc in the Database class for more information)
+            if (arr.length == 1) { // no expected paramters
+                data.dump();
+            } else {
+                System.out.println("Incorrect usage of 'dump' command. No additional parameters should be provided.");
+            }
 
         }
         else {
-                // the first white space delimited string in the line is not
+            // the first white space delimited string in the line is not
             // one of the commands which can manipulate the database,
             // a message will be written to the console
             System.out.println("Unrecognized command.");
