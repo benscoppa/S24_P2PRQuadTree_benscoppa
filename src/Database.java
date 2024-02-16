@@ -52,7 +52,23 @@ public class Database {
         // Delegates the decision mostly to SkipList, only
         // writing the correct message to the console from
         // that
-
+        Rectangle rec = pair.getValue();
+        // check rectangle validity and print message
+        if (rec.isInvalid()) {
+            System.out.println(String.format("Rectangle rejected: "
+                               + "(%s, %d, %d, %d, %d)", 
+                               pair.getKey(), rec.getxCoordinate(), 
+                               rec.getyCoordinate(), 
+                               rec.getWidth(), rec.getHeight()));
+        } 
+        else {
+            list.insert(pair);
+            System.out.println(String.format("Rectangle inserted: "
+                               + "(%s, %d, %d, %d, %d)", 
+                               pair.getKey(), rec.getxCoordinate(), 
+                               rec.getyCoordinate(), 
+                               rec.getWidth(), rec.getHeight()));
+        }
     }
 
 
@@ -134,7 +150,8 @@ public class Database {
      * will all be delegated to the SkipList.
      */
     public void dump() {
-        
+        // delegate dump to SkipList
+        list.dump();
     }
 
 }

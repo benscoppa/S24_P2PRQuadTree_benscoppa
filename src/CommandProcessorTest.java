@@ -8,8 +8,8 @@ import student.TestableRandom;
  * Also test passing improper command to ensure 
  * all class functionalities work as intended.
  * 
- * @author <your_name>
- * @version <version_no>
+ * @author Ben Scoppa
+ * @version 2/16/2024
  */
 public class CommandProcessorTest extends TestCase {
     
@@ -21,6 +21,7 @@ public class CommandProcessorTest extends TestCase {
      */
     public void setUp() {
     	// TODO: implement setup
+        
     }
     
     // TODO: implement tests

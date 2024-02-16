@@ -6,8 +6,9 @@ import java.util.regex.Pattern;
  * by line commands for the format specified in the project spec.
  * 
  * @author CS Staff
+ * @author Ben Scoppa
  * 
- * @version 2024-01-22
+ * @version 2024-02-16
  */
 public class CommandProcessor {
 
@@ -21,8 +22,6 @@ public class CommandProcessor {
      * exist, so the only constructor takes a database class object to feed
      * commands to.
      * 
-     * @param dataIn
-     *            the database object to manipulate
      */
     public CommandProcessor() {
         data = new Database();
@@ -32,13 +31,13 @@ public class CommandProcessor {
     /**
      * This method parses keywords in the line and calls methods in the
      * database as required. Each line command will be specified by one of the
-     * keywords to perform the actions. 
-     * These actions are performed on specified objects and include insert, remove,
-     * regionsearch, search, and dump. If the command in the file line is not
-     * one of these, an appropriate message will be written in the console. This
-     * processor method is called for each line in the file. Note that the
-     * methods called will themselves write to the console, this method does
-     * not, only calling methods that do.
+     * keywords to perform the actions. These actions are performed on 
+     * specified objects and include insert, remove, regionsearch, search, and 
+     * dump. If the command in the file line is not one of these, an 
+     * appropriate message will be written in the console. This processor 
+     * method is called for each line in the file. Note that the methods 
+     * called will themselves write to the console, this method does not, 
+     * only calling methods that do.
      * 
      * @param line
      *            a single line from the text file
@@ -67,11 +66,16 @@ public class CommandProcessor {
                     KVPair<String, Rectangle> pair = new KVPair<>(name, rect);
                     data.insert(pair);
                     
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters for 'insert' command.");
+                } 
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters "
+                                     + "for 'insert' command.");
+                    e.printStackTrace();
                 }
-            } else {
-                System.out.println("Incorrect number of parameters for 'insert' command.");
+            } 
+            else {
+                System.out.println("Incorrect number of "
+                                 + "parameters for 'insert' command.");
             }
         }
         // calls the appropriate remove method based on the
@@ -96,11 +100,16 @@ public class CommandProcessor {
                     
                     data.remove(x, y, w, h);
                   
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters for 'remove' command.");
+                } 
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters "
+                                     + "for 'remove' command.");
+                    e.printStackTrace();
                 }
-            } else {
-                System.out.println("Incorrect number of parameters for 'remove' command.");
+            } 
+            else {
+                System.out.println("Incorrect number of parameters "
+                                 + "for 'remove' command.");
             } 
         }
         else if (command.equals("regionsearch")) {
@@ -115,20 +124,28 @@ public class CommandProcessor {
 
                     data.regionsearch(x, y, w, h);
 
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters for 'regionsearch' command.");
+                } 
+                catch (NumberFormatException e) {
+                    System.out.println("Invalid parameters "
+                                     + "for 'regionsearch' command.");
+                    e.printStackTrace();
                 }
-            } else {
-                System.out.println("Incorrect number of parameters for 'regionsearch' command.");
+            } 
+            else {
+                System.out.println("Incorrect number of parameters "
+                                 + "for 'regionsearch' command.");
             }
         }
         else if (command.equals("intersections")) {
             // calls the intersections method, no parameters to be passed
-            // (see the intersections JavaDoc in the Database class for more information)
+            // (see the intersections JavaDoc in the Database class for 
+            // more information)
             if (arr.length == 1) { // no expected parameters
                 data.intersections();
-            } else {
-                System.out.println("Invalid parameters for 'intersection' command.");
+            } 
+            else {
+                System.out.println("Invalid parameters "
+                                 + "for 'intersection' command.");
             }
            
         }
@@ -137,18 +154,23 @@ public class CommandProcessor {
             if (arr.length == 2) { // expected parameter: name
                 String name = arr[1];
                 data.search(name);
-            } else {
-                System.out.println("Incorrect number of parameters for 'search' command.");
+            } 
+            else {
+                System.out.println("Incorrect number of parameters "
+                                 + "for 'search' command.");
             }
            
         }
         else if (command.equals("dump")) {
             // calls the dump method for the database, takes no parameters
-            // (see the dump() JavaDoc in the Database class for more information)
+            // (see the dump() JavaDoc in the Database class for 
+            // more information)
             if (arr.length == 1) { // no expected paramters
                 data.dump();
-            } else {
-                System.out.println("Incorrect usage of 'dump' command. No additional parameters should be provided.");
+            } 
+            else {
+                System.out.println("Invalid parameters "
+                                 + "for 'dump' command.");
             }
 
         }
