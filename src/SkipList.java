@@ -34,7 +34,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
 	// TODO Ideally, you should call this method inside other methods 
 	// keep this method private. Since, we do not have any methods to call
 	// this method at this time, we keep this publicly accessible and testable.  
-	public int randomLevel() {
+	private int randomLevel() {
 		int level = 1;
 		while (rng.nextBoolean())
 			level++;
@@ -71,8 +71,35 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
     @SuppressWarnings("unchecked")
     public void insert(KVPair<K, V> it) {
         
+        int newLevel = randomLevel();
         
+        // adjust the head node level if needed
+        if (newLevel > head.level) {
+            adjustHead(newLevel);
+        }
         
+        // create a new update array
+        SkipNode[] update = (SkipNode[])Array.newInstance(SkipList.SkipNode.class,
+                             head.level + 1);
+        
+        SkipNode searchNode = head;
+        
+        // Find insert position by comparing the key of it to those in the list
+        for (int i = searchNode.level; i >= 0; i--) { 
+            while ((searchNode.forward[i] != null) && 
+                  (searchNode.forward[i].element().getKey().compareTo(it.getKey()) < 0)) {
+                searchNode = searchNode.forward[i];
+            }
+            update[i] = searchNode; // track end at level i
+          }
+        
+        // create a new skipnode for the KVPair
+        SkipNode newNode = new SkipNode(it, newLevel);
+        for (int i = 0; i <= newLevel; i++) { // splice into list
+            newNode.forward[i] = update[i].forward[i]; // who newNode points to
+            update[i].forward[i] = newNode; // who points to newNode
+        }
+        size++; // increment size
     }
 
 
@@ -86,6 +113,16 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
     @SuppressWarnings("unchecked")
     public void adjustHead(int newLevel) {
         
+        // create new head node with more levels
+        SkipNode temp = head;
+        head = new SkipNode(null, newLevel);
+        
+        // copy old head node pointers over
+        for (int i = 0; i <= head.level; i++) {
+          head.forward[i] = temp.forward[i];
+        }
+        // increase the level
+        head.level = newLevel;
     }
 
 
