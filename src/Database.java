@@ -56,18 +56,12 @@ public class Database {
         // check rectangle validity and print message
         if (rec.isInvalid()) {
             System.out.println(String.format("Rectangle rejected: "
-                               + "(%s, %d, %d, %d, %d)", 
-                               pair.getKey(), rec.getxCoordinate(), 
-                               rec.getyCoordinate(), 
-                               rec.getWidth(), rec.getHeight()));
+                               + pair.toString()));
         } 
         else {
             list.insert(pair);
-            System.out.println(String.format("Rectangle inserted: "
-                               + "(%s, %d, %d, %d, %d)", 
-                               pair.getKey(), rec.getxCoordinate(), 
-                               rec.getyCoordinate(), 
-                               rec.getWidth(), rec.getHeight()));
+            System.out.println(String.format("Rectangle inserted: " 
+                               + pair.toString()));
         }
     }
 
@@ -150,6 +144,7 @@ public class Database {
      * will all be delegated to the SkipList.
      */
     public void dump() {
+        
         // delegate dump to SkipList
         list.dump();
     }

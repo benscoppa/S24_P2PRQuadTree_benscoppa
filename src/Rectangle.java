@@ -173,8 +173,7 @@ public class Rectangle {
      */
     public String toString() {
         
-        return String.format("Rectangle Cordinates: (%d, %d), "
-                             + "Width: %d, Height: %d", 
+        return String.format("%d, %d, %d, %d", 
                              xCoordinate, yCoordinate, width, height);
     }
 

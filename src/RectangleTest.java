@@ -229,9 +229,7 @@ public class RectangleTest extends TestCase {
      */
     public void testToString() {
         
-        assertFuzzyEquals(rec.toString(), 
-                          "Rectangle Cordinates: (500, 600), "
-                          + "Width: 100, Height: 200");
+        assertFuzzyEquals(rec.toString(), "500, 600, 100, 200");
         
     }
     

@@ -34,7 +34,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
 	// TODO Ideally, you should call this method inside other methods 
 	// keep this method private. Since, we do not have any methods to call
 	// this method at this time, we keep this publicly accessible and testable.  
-	private int randomLevel() {
+	public int randomLevel() {
 		int level = 1;
 		while (rng.nextBoolean())
 			level++;
@@ -157,7 +157,27 @@ public class SkipList<K extends Comparable<? super K>, V> implements Iterable<KV
      * Prints out the SkipList in a human readable format to the console.
      */
     public void dump() {
-  
+        
+        System.out.println("SkipList dump:");
+
+        SkipNode current = head;
+        
+        // traverse the list from the head node
+        while (current != null) {
+            // print nodes depth and value to console
+            if (current.pair == null) {
+                System.out.println("Node has depth " + current.level + ", Value (null)");
+            } 
+            else {
+                // Print the node's depth and value.
+                System.out.println("Node has depth " + current.level + ", Value " + current.pair.toString());
+            }
+            // move to the next node at base level
+            current = current.forward[0];
+        }
+        
+        // print skip list size
+        System.out.println("SkipList size is: " + size);
     }
 
     /**
