@@ -81,7 +81,7 @@ public class Database {
 
         // check if the remove failed and print error message if needed
         if (removed == null) {
-            System.out.printf("Rectangle not found: %s\n", name);
+            System.out.printf("Rectangle not found: (%s)\n", name);
             return;
         }
 
@@ -185,7 +185,6 @@ public class Database {
         for (KVPair<String, Rectangle> rec : matches) {
             System.out.printf("%s\n", rec.toString());
         }
-
     }
 
 

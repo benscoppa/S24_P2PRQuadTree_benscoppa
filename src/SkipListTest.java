@@ -39,6 +39,10 @@ public class SkipListTest extends TestCase {
     private ArrayList<KVPair<String, Rectangle>> AMatches;
     private ArrayList<KVPair<String, Rectangle>> Empty;
 
+    /***
+     * Sets up Rectangles, KVPairs and ArrayList to be 
+     * used for testing
+     */
     @Before
     public void setUp() {
 
@@ -117,7 +121,7 @@ public class SkipListTest extends TestCase {
      */
     @Test
     public void testInsertAndDump() {
-        
+
         // insert into the skip list
         sl.insert(B1Pair);
         // insert before B
@@ -230,8 +234,8 @@ public class SkipListTest extends TestCase {
         // check the size
         assertEquals(sl.size(), 6);
 
-        // remove B1 and one copy of C1
-        assertEquals(B1Pair, sl.removeByValue(B1));
+        // remove B2 and one copy of C1
+        assertEquals(B2Pair, sl.removeByValue(B2));
         assertEquals(C1Pair, sl.removeByValue(C1));
 
         // remove second copy of C1
@@ -253,12 +257,12 @@ public class SkipListTest extends TestCase {
         assertTrue(dumpOutput.contains("SkipList dump:\n"));
         assertTrue(dumpOutput.contains("Value (null)\n"));
         assertTrue(dumpOutput.contains("Value (A, 1, 2, 3, 4)\n"));
-        // removed from list
-        assertFalse(dumpOutput.contains("Value (B, 5, 6, 7, 8)\n"));
+        assertTrue(dumpOutput.contains("Value (B, 5, 6, 7, 8)\n"));
         // removed from list
         assertFalse(dumpOutput.contains("Value (C, 9, 10, 11, 12)\n"));
         assertTrue(dumpOutput.contains("Value (A, 13, 14, 15, 16)\n"));
-        assertTrue(dumpOutput.contains("Value (B, 21, 22, 23, 24)\n"));
+        // removed from list
+        assertFalse(dumpOutput.contains("Value (B, 21, 22, 23, 24)\n"));
         assertTrue(dumpOutput.contains("SkipList size is: 3\n"));
     }
 
