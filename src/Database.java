@@ -128,6 +128,7 @@ public class Database {
 
         // print success message
         System.out.printf("Rectangle removed: %s\n", removed.toString());
+     
     }
 
 
@@ -176,12 +177,12 @@ public class Database {
 
         // print error message if no matching keys found
         if (matches.isEmpty()) {
-            System.out.printf("Rectangle not found: %s", name);
+            System.out.printf("Rectangle not found: %s\n", name);
             return;
         }
 
         // print out all the rectangles matching the search key name
-        System.out.printf("Rectangles found matching \"a\":\n");
+        System.out.printf("Rectangles found matching \"%s\":\n", name);
         for (KVPair<String, Rectangle> rec : matches) {
             System.out.printf("%s\n", rec.toString());
         }

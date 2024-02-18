@@ -328,6 +328,9 @@ public class SkipListTest extends TestCase {
         // insert extra entries
         sl.insert(C1Pair);
         sl.insert(C2Pair);
+        
+        // check that both entries are found
+        assertTrue(sl.search("A").size() == 2);
 
         // test key in list
         assertEquals(sl.search("A"), AMatches);
