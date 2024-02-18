@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.junit.Test;
@@ -34,6 +35,10 @@ public class SkipListTest extends TestCase {
     private KVPair<String, Rectangle> C1Pair;
     private KVPair<String, Rectangle> C2Pair;
 
+    // ArrayLists for testing search
+    private ArrayList<KVPair<String, Rectangle>> AMatches;
+    private ArrayList<KVPair<String, Rectangle>> Empty;
+
     @Before
     public void setUp() {
 
@@ -55,6 +60,13 @@ public class SkipListTest extends TestCase {
         A2Pair = new KVPair<>("A", A2);
         B2Pair = new KVPair<>("B", B2);
         C2Pair = new KVPair<>("C", C2);
+
+        // initialize array lists
+        AMatches = new ArrayList<>();
+        AMatches.add(A2Pair);
+        AMatches.add(A1Pair);
+
+        Empty = new ArrayList<>();
 
     }
 
@@ -105,7 +117,7 @@ public class SkipListTest extends TestCase {
      */
     @Test
     public void testInsertAndDump() {
-
+        
         // insert into the skip list
         sl.insert(B1Pair);
         // insert before B
@@ -209,7 +221,7 @@ public class SkipListTest extends TestCase {
         sl.insert(A1Pair);
         // insert after B
         sl.insert(C1Pair);
-        
+
         sl.insert(A2Pair);
         // insert same as C1
         sl.insert(C1Pair);
@@ -223,7 +235,7 @@ public class SkipListTest extends TestCase {
         assertEquals(C1Pair, sl.removeByValue(C1));
 
         // remove second copy of C1
-        assertEquals(C1Pair,sl.removeByValue(C1));
+        assertEquals(C1Pair, sl.removeByValue(C1));
 
         // attempt to remove entry not in list
         assertEquals(null, sl.removeByValue(C1));
@@ -275,7 +287,7 @@ public class SkipListTest extends TestCase {
 
         // test remove by key
         sl.insert(A1Pair);
-        
+
         // remove entry not in list
         assertEquals(sl.remove("B"), null);
 
@@ -287,7 +299,7 @@ public class SkipListTest extends TestCase {
 
         // test remove by value
         sl.insert(A1Pair);
-        
+
         // remove entry not in list
         assertEquals(sl.removeByValue(B1), null);
 
@@ -296,6 +308,28 @@ public class SkipListTest extends TestCase {
 
         // make sure that the list is empty again
         assertEquals(sl.size(), 0);
+
+    }
+
+
+    /***
+     * Test the search method
+     */
+    @Test
+    public void testSearch() {
+
+        // insert A1 and A2 into the skip list
+        sl.insert(A1Pair);
+        sl.insert(A2Pair);
+        // insert extra entries
+        sl.insert(C1Pair);
+        sl.insert(C2Pair);
+
+        // test key in list
+        assertEquals(sl.search("A"), AMatches);
+
+        // test key not present in list
+        assertEquals(sl.search("B"), Empty);
 
     }
 

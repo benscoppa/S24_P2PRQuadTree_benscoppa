@@ -26,7 +26,7 @@ public class SkipList<K extends Comparable<? super K>, V>
      * Initializes the fields head, size and level
      */
     public SkipList() {
-        head = new SkipNode(null, 0);
+        head = new SkipNode(null, 1);
         size = 0;
         this.rng = new TestableRandom();
     }
@@ -59,7 +59,30 @@ public class SkipList<K extends Comparable<? super K>, V>
      * @return null
      */
     public ArrayList<KVPair<K, V>> search(K key) {
-        return null;
+
+        // create an array to search matches
+        ArrayList<KVPair<K, V>> matches = new ArrayList<>();
+        SkipNode searchNode = head;
+
+        // traverse the skiplist to find the key
+        for (int i = head.level; i >= 0; i--) {
+            while (searchNode.forward[i] != null && searchNode.forward[i].pair
+                .getKey().compareTo(key) < 0) {
+                searchNode = searchNode.forward[i];
+            }
+        }
+
+        // move to the next node
+        searchNode = searchNode.forward[0];
+
+        // add all of the matching keys to the matches array list
+        while (searchNode != null && searchNode.pair.getKey().equals(key)) {
+            matches.add(searchNode.pair);
+            searchNode = searchNode.forward[0];
+        }
+
+        // return the array list of matches
+        return matches;
     }
 
 
@@ -150,15 +173,15 @@ public class SkipList<K extends Comparable<? super K>, V>
      */
     @SuppressWarnings("unchecked")
     public KVPair<K, V> remove(K key) {
-        
+
         // create a new update array
         SkipNode[] update = (SkipNode[])Array.newInstance(
             SkipList.SkipNode.class, head.level + 1);
-        
+
         // start the search at the head
         SkipNode searchNode = head;
-        
-        // find key to remove position by comparing the key of it to those in 
+
+        // find key to remove position by comparing the key of it to those in
         // the list and add to the upadte array
         for (int i = searchNode.level; i >= 0; i--) {
             while ((searchNode.forward[i] != null) && (searchNode.forward[i]
@@ -167,13 +190,13 @@ public class SkipList<K extends Comparable<? super K>, V>
             }
             update[i] = searchNode;
         }
-        
+
         // check next node
         searchNode = searchNode.forward[0];
         if (searchNode != null && searchNode.pair.getKey().equals(key)) {
             // remove the node and update pointers
             for (int i = 0; i <= head.level; i++) {
-                // make sure the pointer being overwritten 
+                // make sure the pointer being overwritten
                 // is the node to remove
                 if (update[i].forward[i] == searchNode) {
                     update[i].forward[i] = searchNode.forward[i];
@@ -182,7 +205,7 @@ public class SkipList<K extends Comparable<? super K>, V>
             size--; // deacrease size of skip list
             return searchNode.element(); // return removed KVPair
         }
-        
+
         return null; // return null if invalid
     }
 
@@ -196,15 +219,15 @@ public class SkipList<K extends Comparable<? super K>, V>
      */
     @SuppressWarnings("unchecked")
     public KVPair<K, V> removeByValue(V val) {
-        
+
         // create a new update array
         SkipNode[] update = (SkipNode[])Array.newInstance(
             SkipList.SkipNode.class, head.level + 1);
-        
+
         // start the search at the head
         SkipNode searchNode = head;
-        
-        // find value to remove position by comparing the key of it to those in 
+
+        // find value to remove position by comparing the key of it to those in
         // the list and add to the update array
         for (int i = searchNode.level; i >= 0; i--) {
             while ((searchNode.forward[i] != null) && (!searchNode.forward[i]
@@ -213,13 +236,13 @@ public class SkipList<K extends Comparable<? super K>, V>
             }
             update[i] = searchNode;
         }
-        
+
         // check next node
         searchNode = searchNode.forward[0];
         if (searchNode != null && searchNode.pair.getValue().equals(val)) {
             // remove the node and update pointers
             for (int i = 0; i <= head.level; i++) {
-                // make sure the pointer being overwritten 
+                // make sure the pointer being overwritten
                 // is the node to remove
                 if (update[i].forward[i] == searchNode) {
                     update[i].forward[i] = searchNode.forward[i];
@@ -228,7 +251,7 @@ public class SkipList<K extends Comparable<? super K>, V>
             size--; // deacrease size of skip list
             return searchNode.element(); // return removed KVPair
         }
-        
+
         return null; // return null if invalid
     }
 
