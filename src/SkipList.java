@@ -151,11 +151,6 @@ public class SkipList<K extends Comparable<? super K>, V>
     @SuppressWarnings("unchecked")
     public KVPair<K, V> remove(K key) {
         
-        // empty skip list
-        if (head.forward[0] == null) {
-            return null;
-        }
-        
         // create a new update array
         SkipNode[] update = (SkipNode[])Array.newInstance(
             SkipList.SkipNode.class, head.level + 1);
@@ -180,14 +175,12 @@ public class SkipList<K extends Comparable<? super K>, V>
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten 
                 // is the node to remove
-                if (update[i].forward[i] != searchNode) {
-                    break;
+                if (update[i].forward[i] == searchNode) {
+                    update[i].forward[i] = searchNode.forward[i];
                 }
-                update[i].forward[i] = searchNode.forward[i];
             }
-            
             size--; // deacrease size of skip list
-            return searchNode.pair; // return removed KVPair
+            return searchNode.element(); // return removed KVPair
         }
         
         return null; // return null if invalid
@@ -199,15 +192,10 @@ public class SkipList<K extends Comparable<? super K>, V>
      * 
      * @param val
      *            the value of the KVPair to be removed
-     * @return returns true if the removal was successful
+     * @return returns the removed pair if the pair was valid and null if not
      */
     @SuppressWarnings("unchecked")
     public KVPair<K, V> removeByValue(V val) {
-        
-        // empty skip list
-        if (head.forward[0] == null) {
-            return null;
-        }
         
         // create a new update array
         SkipNode[] update = (SkipNode[])Array.newInstance(
@@ -233,14 +221,12 @@ public class SkipList<K extends Comparable<? super K>, V>
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten 
                 // is the node to remove
-                if (update[i].forward[i] != searchNode) {
-                    break;
+                if (update[i].forward[i] == searchNode) {
+                    update[i].forward[i] = searchNode.forward[i];
                 }
-                update[i].forward[i] = searchNode.forward[i];
             }
-            
             size--; // deacrease size of skip list
-            return searchNode.pair; // return removed KVPair
+            return searchNode.element(); // return removed KVPair
         }
         
         return null; // return null if invalid
