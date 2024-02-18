@@ -127,13 +127,13 @@ public class CommandProcessor {
                 }
                 catch (NumberFormatException e) {
                     System.out.println("Invalid parameters "
-                        + "for 'regionsearch' command.\n");
+                        + "for 'regionsearch' command\n");
                     e.printStackTrace();
                 }
             }
             else {
                 System.out.println("Incorrect number of parameters "
-                    + "for 'regionsearch' command.\n");
+                    + "for 'regionsearch' command\n");
             }
         }
         else if (command.equals("intersections")) {
@@ -145,7 +145,7 @@ public class CommandProcessor {
             }
             else {
                 System.out.println("Invalid parameters "
-                    + "for 'intersection' command.\n");
+                    + "for 'intersection' command\n");
             }
 
         }
@@ -157,7 +157,7 @@ public class CommandProcessor {
             }
             else {
                 System.out.println("Incorrect number of parameters "
-                    + "for 'search' command.\n");
+                    + "for 'search' command\n");
             }
 
         }
@@ -169,8 +169,8 @@ public class CommandProcessor {
                 data.dump();
             }
             else {
-                System.out.println("Invalid parameters "
-                    + "for 'dump' command.\n");
+                System.out.println("Incorrect number of parameters "
+                    + "for 'dump' command\n");
             }
 
         }
@@ -178,7 +178,7 @@ public class CommandProcessor {
             // the first white space delimited string in the line is not
             // one of the commands which can manipulate the database,
             // a message will be written to the console
-            System.out.println("Unrecognized command.\n");
+            System.out.println("Unrecognized command\n");
         }
     }
 

@@ -51,11 +51,11 @@ public class CommandProcessorTest extends TestCase {
         // verify system output
         assertTrue(output.contains(
             "Incorrect number of parameters for 'insert' command\n"));
-        
+
         // test invalid parameters
         invalidCommand = "insert recName A B C D";
         cmdProc.processor(invalidCommand);
-        
+
         // sytem output
         output = systemOut().getHistory();
 
@@ -64,30 +64,30 @@ public class CommandProcessorTest extends TestCase {
             "Invalid parameters for 'insert' command\n"));
 
     }
-    
+
+
     public void testRemove() {
-        
-        // call remove by name
+
+        // test remove by name
         String validCommand = "remove recName";
         cmdProc.processor(validCommand);
-        
+
         // sytem output
         String output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains(
-            "Rectangle not found: (recName)"));
-        
+        assertTrue(output.contains("Rectangle not found: (recName)"));
+
         // call remove by parameters
         validCommand = "remove 1 1 1 1";
         cmdProc.processor(validCommand);
-        
+
         // sytem output
         output = systemOut().getHistory();
 
         // verify system output
         assertTrue(output.contains("Rectangle not found: (1, 1, 1, 1)"));
-        
+
         // test incorret number of parameters
         String invalidCommand = "remove recName A";
         cmdProc.processor(invalidCommand);
@@ -98,18 +98,84 @@ public class CommandProcessorTest extends TestCase {
         // verify system output
         assertTrue(output.contains(
             "Incorrect number of parameters for 'remove' command\n"));
-        
+
         // test invalid parameters
         invalidCommand = "remove A B C D";
         cmdProc.processor(invalidCommand);
-        
+
         // sytem output
         output = systemOut().getHistory();
 
         // verify system output
         assertTrue(output.contains(
             "Invalid parameters for 'remove' command\n"));
+
+    }
+
+
+    public void testSearch() {
+
+        // test valid search
+        String validCommand = "search recName";
+        cmdProc.processor(validCommand);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("Rectangle not found: recName"));
+
+        // test incorret number of parameters
+        String invalidCommand = "search recName A";
+        cmdProc.processor(invalidCommand);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Incorrect number of parameters for 'search' command\n"));
+
+    }
+
+
+    public void testDump() {
+
+        // test valid dump
+        String validCommand = "dump";
+        cmdProc.processor(validCommand);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("SkipList dump:"));
+        assertTrue(output.contains("Node has depth 1, Value (null)"));
+        assertTrue(output.contains("SkipList size is: 0"));
+
+        // test incorret number of parameters
+        String invalidCommand = "dump A";
+        cmdProc.processor(invalidCommand);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Incorrect number of parameters for 'dump' command\n"));
+    }
+    
+    public void testUnrecognizedCommand() {
         
+        // test unrecognized command
+        String unrecognizedCommand = "unrecognized";
+        cmdProc.processor(unrecognizedCommand);
+
+        // sytem output
+        String output = systemOut().getHistory();
+        
+        // verify system output
+        assertTrue(output.contains("Unrecognized command\n"));
     }
 
 }

@@ -40,7 +40,7 @@ public class SkipListTest extends TestCase {
     private ArrayList<KVPair<String, Rectangle>> Empty;
 
     /***
-     * Sets up Rectangles, KVPairs and ArrayList to be 
+     * Sets up Rectangles, KVPairs and ArrayList to be
      * used for testing
      */
     @Before
@@ -112,6 +112,25 @@ public class SkipListTest extends TestCase {
 
         // Compare the values
         assertEquals(expectedLevelValue, randomLevelValue);
+    }
+
+
+    /***
+     * Test the dump method on an empty skiplist
+     */
+    @Test
+    public void testDumpEmpty() {
+
+        sl.dump();
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("SkipList dump:"));
+        assertTrue(output.contains("Node has depth 1, Value (null)"));
+        assertTrue(output.contains("SkipList size is: 0"));
+
     }
 
 
@@ -328,7 +347,7 @@ public class SkipListTest extends TestCase {
         // insert extra entries
         sl.insert(C1Pair);
         sl.insert(C2Pair);
-        
+
         // check that both entries are found
         assertTrue(sl.search("A").size() == 2);
 
