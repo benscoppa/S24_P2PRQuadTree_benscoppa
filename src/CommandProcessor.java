@@ -48,6 +48,13 @@ public class CommandProcessor {
         String[] arr = line.split("\\s{1,}");
         String command = arr[0]; // the command will be the first of these
                                  // elements
+
+        // name = rectangle name (key)
+        // x = xCoordinate
+        // y = yCoordinate
+        // w = width
+        // h = height
+
         // calls the insert function and passes the correct
         // parameters by converting the string integers into
         // their Integer equivalent, trimming the whitespace
@@ -82,6 +89,7 @@ public class CommandProcessor {
         // number of white space delimited strings in the line
         else if (command.equals("remove")) {
             // checks the number of white space delimited strings in the line
+            // to determine if remove by name or by value
             if (arr.length == 2) { // expect paramter: name
                 // Calls remove by name
                 String name = arr[1];
@@ -161,9 +169,7 @@ public class CommandProcessor {
 
         }
         else if (command.equals("dump")) {
-            // calls the dump method for the database, takes no parameters
-            // (see the dump() JavaDoc in the Database class for
-            // more information)
+            // calls the dump method for the database
             if (arr.length == 1) { // no expected paramters
                 data.dump();
             }

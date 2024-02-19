@@ -23,6 +23,29 @@ import java.util.Scanner;
  */
 
 /**
+ * This program implements a skiplist that stores rectangles as a key
+ * value pair. This class creates command processor object and reads
+ * in an input file to input commands. The command processor determines
+ * the command that was read. The commands are insert which adds a
+ * rectangle to the skiplist. remove which is called by name (key)
+ * or by value and remove the rectangle from the skiplist if found.
+ * regionsearch which prints out the rectangles that are found inside
+ * the specified region. intersections which outputs all the
+ * intersecting rectangles in the skiplist. search which prints all
+ * the rectangles with a specified key. Last is dump which prints
+ * the depth of each node and its value. Database acts as the interface
+ * between the command processor and the skiplist. The skiplist is
+ * design to work on all KVPairs not just rectangles. Therefore region
+ * search and intersections are handled in database as well as printing
+ * results to the console. Skiplist is the actual skiplist that works
+ * on all KVPairs. KVPair handles creating and retriving key and value
+ * from KVPairs. The Rectngle class hangles the rectangle objects and
+ * determining if rectangles are equal or intersect. All of these classes
+ * also have test classes that test all of the methods inside them to
+ * ensure they work properly.
+ */
+
+/**
  * The class containing the main method, the entry point of the application. It
  * will take a command line file argument which include the commands to be read
  * and creates the appropriate SkipList object and outputs the correct results

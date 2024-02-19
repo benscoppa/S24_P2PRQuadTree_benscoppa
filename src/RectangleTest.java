@@ -264,5 +264,5 @@ public class RectangleTest extends TestCase {
         touchingDown = new Rectangle(1, 1, 1, 1023);
         assertFalse(touchingDown.isInvalid());
     }
-   
+
 }

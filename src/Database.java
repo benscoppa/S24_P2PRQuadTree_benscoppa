@@ -27,9 +27,8 @@ public class Database {
     // see the KVPair class for more information
     private SkipList<String, Rectangle> list;
 
-    // This is an Iterator object over the SkipList to loop through it from
+    // These are Iterator objects for the SkipList to loop through it from
     // outside the class.
-    // You will need to define an extra Iterator for the intersections method.
     private Iterator<KVPair<String, Rectangle>> itr1;
     private Iterator<KVPair<String, Rectangle>> itr2;
 
@@ -52,9 +51,8 @@ public class Database {
      *            the KVPair to be inserted
      */
     public void insert(KVPair<String, Rectangle> pair) {
-        // Delegates the decision mostly to SkipList, only
-        // writing the correct message to the console from
-        // that
+
+        // get the rectangle object
         Rectangle rec = pair.getValue();
         // check rectangle validity and print error message if needed
         if (rec.isInvalid()) {
@@ -62,7 +60,7 @@ public class Database {
             return;
         }
 
-        // add rectangle to the list
+        // add rectangle to the list if valid
         list.insert(pair);
         System.out.printf("Rectangle inserted: %s%n", pair.toString());
     }

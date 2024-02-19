@@ -36,12 +36,11 @@ public class SkipList<K extends Comparable<? super K>, V>
      * returns a random level (using geometric distribution), minimum of 1
      * Ideally, you should call this method inside other methods
      * keep this method private. Since, we do not have any methods to call
-     * this method at this time, we keep this publicly accessible and
+     * this method at this time, we keep this publicly accessible and testable
      * 
      * @return level
      *         the random level generated
      */
-    // testable.
     public int randomLevel() {
         int level = 1;
         while (rng.nextBoolean())
@@ -118,7 +117,7 @@ public class SkipList<K extends Comparable<? super K>, V>
         // start search at the head node
         SkipNode searchNode = head;
 
-        // Find insert position by comparing the key of it to those in the list
+        // find insert position by comparing the key to keys in the list
         for (int i = searchNode.level; i >= 0; i--) {
             while ((searchNode.forward[i] != null) && (searchNode.forward[i]
                 .element().getKey().compareTo(it.getKey()) < 0)) {
@@ -181,8 +180,8 @@ public class SkipList<K extends Comparable<? super K>, V>
         // start the search at the head
         SkipNode searchNode = head;
 
-        // find key to remove position by comparing the key of it to those in
-        // the list and add to the upadte array
+        // find key to remove position by comparing the key to those in
+        // the list and add to the updatee array
         for (int i = searchNode.level; i >= 0; i--) {
             while ((searchNode.forward[i] != null) && (searchNode.forward[i]
                 .element().getKey().compareTo(key) < 0)) {
@@ -193,12 +192,13 @@ public class SkipList<K extends Comparable<? super K>, V>
 
         // check next node
         searchNode = searchNode.forward[0];
-        if (searchNode != null && searchNode.pair.getKey().equals(key)) {
+        if (searchNode != null && searchNode.element().getKey().equals(key)) {
             // remove the node and update pointers
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten
                 // is the node to remove
-                if (update[i].forward[i] == searchNode) {
+                if (update[i].forward[i] != null
+                    && update[i].forward[i] == searchNode) {
                     update[i].forward[i] = searchNode.forward[i];
                 }
             }
@@ -227,11 +227,11 @@ public class SkipList<K extends Comparable<? super K>, V>
         // start the search at the head
         SkipNode searchNode = head;
 
-        // find value to remove position by comparing the key of it to those in
+        // find key to remove position by comparing the value of it to those in
         // the list and add to the update array
-        for (int i = searchNode.level; i >= 0; i--) {
-            while ((searchNode.forward[i] != null) && (!searchNode.forward[i]
-                .element().getValue().equals(val))) {
+        for (int i = head.level; i >= 0; i--) {
+            while (searchNode.forward[i] != null && !val.equals(
+                searchNode.forward[i].pair.getValue())) {
                 searchNode = searchNode.forward[i];
             }
             update[i] = searchNode;
@@ -239,12 +239,14 @@ public class SkipList<K extends Comparable<? super K>, V>
 
         // check next node
         searchNode = searchNode.forward[0];
-        if (searchNode != null) {
+
+        if (searchNode != null && val.equals(searchNode.pair.getValue())) {
             // remove the node and update pointers
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten
                 // is the node to remove
-                if (update[i].forward[i] == searchNode) {
+                if (update[i].forward[i] != null
+                    && update[i].forward[i] == searchNode) {
                     update[i].forward[i] = searchNode.forward[i];
                 }
             }
@@ -260,7 +262,7 @@ public class SkipList<K extends Comparable<? super K>, V>
      * Prints out the SkipList in a human readable format to the console.
      */
     public void dump() {
-        
+
         // header message
         System.out.printf("SkipList dump:%n");
 
@@ -342,14 +344,14 @@ public class SkipList<K extends Comparable<? super K>, V>
 
         @Override
         public boolean hasNext() {
-            
+
             return current.forward[0] != null;
         }
 
 
         @Override
         public KVPair<K, V> next() {
-            
+
             KVPair<K, V> elem = current.forward[0].element();
             current = current.forward[0];
             return elem;
@@ -359,7 +361,7 @@ public class SkipList<K extends Comparable<? super K>, V>
 
     @Override
     public Iterator<KVPair<K, V>> iterator() {
-        
+
         return new SkipListIterator();
     }
 

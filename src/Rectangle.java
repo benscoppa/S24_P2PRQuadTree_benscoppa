@@ -87,32 +87,32 @@ public class Rectangle {
      * @return true if the rectangle intersects with rec, false if not
      */
     public boolean intersect(Rectangle r2) {
-        
+
         // check that r2 is not null
         if (r2 == null) {
             return false;
         }
-        
-        // check if the rectangle is right of r2 
+
+        // check if the rectangle is right of r2
         if (xCoordinate >= r2.xCoordinate + r2.width) {
             return false;
         }
-        
+
         // check if the rectangle is left of r2
         if (xCoordinate + width <= r2.xCoordinate) {
             return false;
         }
-        
+
         // check if the rectangle is below r2
         if (yCoordinate >= r2.yCoordinate + r2.height) {
             return false;
         }
-        
+
         // check if the rectangle is above r2
         if (yCoordinate + height <= r2.yCoordinate) {
             return false;
         }
-            
+
         // otherwise rectange intersects
         return true;
 
@@ -128,37 +128,36 @@ public class Rectangle {
      *         not
      */
     public boolean equals(Object rec) {
-        
+
         // if rectangle is compared to itself they are equal
         if (this == rec) {
             return true;
         }
-        
+
         // make sure rec is a rectangle class object
         if (!(rec instanceof Rectangle)) {
             return false;
         }
-        
+
         // compare the cordinates of this rectangle and rec
-        Rectangle r2 = (Rectangle) rec;
-        
-        
+        Rectangle r2 = (Rectangle)rec;
+
         if (xCoordinate != r2.xCoordinate) {
             return false;
         }
-        
+
         if (yCoordinate != r2.yCoordinate) {
             return false;
         }
-        
+
         if (height != r2.height) {
             return false;
         }
-        
+
         if (width != r2.width) {
             return false;
         }
-        
+
         // if both cordinates are the same return true
         return true;
     }
@@ -172,9 +171,9 @@ public class Rectangle {
      *         rectangle
      */
     public String toString() {
-        
-        return String.format("%d, %d, %d, %d", 
-                             xCoordinate, yCoordinate, width, height);
+
+        return String.format("%d, %d, %d, %d", xCoordinate, yCoordinate, width,
+            height);
     }
 
 
@@ -184,34 +183,34 @@ public class Rectangle {
      * @return true if the rectangle has invalid parameters, false if not
      */
     public boolean isInvalid() {
-        
-        // check that height and width are positive and  greater than zero
+
+        // check that height and width are positive and greater than zero
         if (height <= 0) {
             return true;
         }
-        
+
         if (width <= 0) {
             return true;
         }
-        
-        // make sure the rectangle fits into the 1024 x 1024 
+
+        // make sure the rectangle fits into the 1024 x 1024
         // worldbox with (0,0) top left
         if (xCoordinate < 0) {
             return true;
         }
-        
+
         if (yCoordinate < 0) {
             return true;
         }
-        
+
         if (xCoordinate + width > 1024) {
             return true;
         }
-        
+
         if (yCoordinate + height > 1024) {
             return true;
         }
-        
+
         // otherwise the retangle is valid
         return false;
     }

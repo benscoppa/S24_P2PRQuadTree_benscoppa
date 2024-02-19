@@ -63,11 +63,13 @@ public class DatabaseTest extends TestCase {
 
 
     /***
-     * Test the insert method of the database class
+     * Test the insert method of the database class with an invalid and valid
+     * rectangle
      */
     @Test
     public void testInsert() {
 
+        // valid rectangle
         data.insert(validPair);
 
         // sytem output
@@ -80,6 +82,7 @@ public class DatabaseTest extends TestCase {
         // clear output history
         systemOut().clearHistory();
 
+        // invalid rectangle
         data.insert(invalidPair);
 
         // sytem output
@@ -92,7 +95,8 @@ public class DatabaseTest extends TestCase {
 
 
     /***
-     * Test the remove method of the database class
+     * Test the remove method of the database class on a rectangle not in
+     * skiplist and one in skiplist
      */
     @Test
     public void testRemove() {
@@ -127,7 +131,10 @@ public class DatabaseTest extends TestCase {
 
 
     /***
-     * Test the remove by parameters method of the database class
+     * Test the remove by parameters method of the database class on a rectangle
+     * not in
+     * skiplist and one in skiplist. Also test attempt to remove invalid
+     * rectangle.
      */
     @Test
     public void testRemoveByValue() {
@@ -169,7 +176,8 @@ public class DatabaseTest extends TestCase {
 
 
     /***
-     * Test the remove by search method of the database class
+     * Test the search method of the database class for key in list and one not
+     * in list
      */
     @Test
     public void testSearch() {
@@ -305,7 +313,7 @@ public class DatabaseTest extends TestCase {
 
 
     /***
-     * Test the regionSearch method empty skiplist
+     * Test the regionSearch method on empty skiplist
      */
     @Test
     public void testRegionSearchEmpty() {
