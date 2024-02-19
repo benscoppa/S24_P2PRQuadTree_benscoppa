@@ -31,6 +31,7 @@ public class Database {
     // outside the class.
     // You will need to define an extra Iterator for the intersections method.
     private Iterator<KVPair<String, Rectangle>> itr1;
+    private Iterator<KVPair<String, Rectangle>> itr2;
 
     /**
      * The constructor for this class initializes a SkipList object with String
@@ -57,13 +58,13 @@ public class Database {
         Rectangle rec = pair.getValue();
         // check rectangle validity and print error message if needed
         if (rec.isInvalid()) {
-            System.out.printf("Rectangle rejected: %s\n", pair.toString());
+            System.out.printf("Rectangle rejected: %s%n", pair.toString());
             return;
         }
 
         // add rectangle to the list
         list.insert(pair);
-        System.out.printf("Rectangle inserted: %s\n", pair.toString());
+        System.out.printf("Rectangle inserted: %s%n", pair.toString());
     }
 
 
@@ -81,12 +82,12 @@ public class Database {
 
         // check if the remove failed and print error message if needed
         if (removed == null) {
-            System.out.printf("Rectangle not found: (%s)\n", name);
+            System.out.printf("Rectangle not found: (%s)%n", name);
             return;
         }
 
         // print success message
-        System.out.printf("Rectangle removed: %s\n", removed.toString());
+        System.out.printf("Rectangle removed: %s%n", removed.toString());
     }
 
 
@@ -111,7 +112,7 @@ public class Database {
         // print error message if rectangle invaild
         if (rec.isInvalid()) {
 
-            System.out.printf("Rectangle Rejected: (%d, %d, %d, %d)\n", x, y, w,
+            System.out.printf("Rectangle Rejected: (%d, %d, %d, %d)%n", x, y, w,
                 h);
             return;
         }
@@ -121,14 +122,14 @@ public class Database {
 
         // check if the remove failed and print error message if needed
         if (removed == null) {
-            System.out.printf("Rectangle not found: (%d, %d, %d, %d)\n", x, y,
+            System.out.printf("Rectangle not found: (%d, %d, %d, %d)%n", x, y,
                 w, h);
             return;
         }
 
         // print success message
-        System.out.printf("Rectangle removed: %s\n", removed.toString());
-     
+        System.out.printf("Rectangle removed: %s%n", removed.toString());
+
     }
 
 
@@ -149,6 +150,35 @@ public class Database {
      */
     public void regionsearch(int x, int y, int w, int h) {
 
+        // check for valid height and with and print error message if needed
+        if (w <= 0 || h <= 0) {
+            System.out.printf("Rectangle rejected: (%d, %d, %d, %d)%n", x, y, w,
+                h);
+            return;
+        }
+
+        // output header
+        System.out.printf("Rectangles intersecting region (%d, %d, %d, %d):%n",
+            x, y, w, h);
+
+        // rectangle that the demensions of the search region
+        Rectangle regionRec = new Rectangle(x, y, w, h);
+
+        // use an iterator to iterate through the skiplist
+        itr1 = list.iterator();
+
+        // iterate through the list
+        while (itr1.hasNext()) {
+            // get the rectangle at each list location
+            KVPair<String, Rectangle> currentPair = itr1.next();
+            Rectangle currentRect = currentPair.getValue();
+
+            // check if the rectangle intersects the search region and print the
+            // KVPair if it does intersect
+            if (currentRect.intersect(regionRec)) {
+                System.out.printf("%s%n", currentPair.toString());
+            }
+        }
     }
 
 
@@ -160,6 +190,38 @@ public class Database {
      */
     public void intersections() {
 
+        // header message
+        System.out.printf("Intersection pairs:%n");
+
+        // create outer loop iterator
+        itr1 = list.iterator();
+
+        // iterate through each entry in the list
+        while (itr1.hasNext()) {
+            KVPair<String, Rectangle> outerLoopPair = itr1.next();
+            Rectangle outerLoopRec = outerLoopPair.getValue();
+
+            // inner loop iterator
+            itr2 = list.iterator();
+
+            // iterate through each entry in the list in the inner loop
+            while (itr2.hasNext()) {
+                KVPair<String, Rectangle> innerLoopPair = itr2.next();
+                Rectangle innerLoopRec = innerLoopPair.getValue();
+
+                // make sure your not comparing a rectangle to another equal
+                // rectangle
+                if (outerLoopRec == innerLoopRec) {
+                    continue;
+                }
+
+                // if the two rectangles intersect print them to the console
+                if (outerLoopRec.intersect(innerLoopRec)) {
+                    System.out.printf("%s | %s%n", outerLoopPair.toString(),
+                        innerLoopPair.toString());
+                }
+            }
+        }
     }
 
 
@@ -177,12 +239,12 @@ public class Database {
 
         // print error message if no matching keys found
         if (matches.isEmpty()) {
-            System.out.printf("Rectangle not found: %s\n", name);
+            System.out.printf("Rectangle not found: %s%n", name);
             return;
         }
 
         // print out all the rectangles matching the search key name
-        System.out.printf("Rectangles found matching \"%s\":\n", name);
+        System.out.printf("Rectangles found matching \"%s\":%n", name);
         for (KVPair<String, Rectangle> rec : matches) {
             System.out.printf("%s\n", rec.toString());
         }

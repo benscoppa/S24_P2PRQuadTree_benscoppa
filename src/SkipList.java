@@ -239,7 +239,7 @@ public class SkipList<K extends Comparable<? super K>, V>
 
         // check next node
         searchNode = searchNode.forward[0];
-        if (searchNode != null && searchNode.pair.getValue().equals(val)) {
+        if (searchNode != null) {
             // remove the node and update pointers
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten
@@ -260,8 +260,9 @@ public class SkipList<K extends Comparable<? super K>, V>
      * Prints out the SkipList in a human readable format to the console.
      */
     public void dump() {
-
-        System.out.println("SkipList dump:\n");
+        
+        // header message
+        System.out.printf("SkipList dump:%n");
 
         SkipNode current = head;
 
@@ -269,12 +270,12 @@ public class SkipList<K extends Comparable<? super K>, V>
         while (current != null) {
             // print node depth and value to console
             if (current.pair == null) {
-                System.out.printf("Node has depth %d, Value (null)\n",
+                System.out.printf("Node has depth %d, Value (null)%n",
                     current.level);
             }
             else {
                 // print the node depth and value.
-                System.out.printf("Node has depth %d, Value %s\n",
+                System.out.printf("Node has depth %d, Value %s%n",
                     current.level, current.pair.toString());
             }
             // move to the next node at base level
@@ -282,7 +283,7 @@ public class SkipList<K extends Comparable<? super K>, V>
         }
 
         // print skip list size
-        System.out.printf("SkipList size is: %d\n", size);
+        System.out.printf("SkipList size is: %d%n", size);
     }
 
     /**
@@ -341,14 +342,14 @@ public class SkipList<K extends Comparable<? super K>, V>
 
         @Override
         public boolean hasNext() {
-            // TODO Auto-generated method stub
+            
             return current.forward[0] != null;
         }
 
 
         @Override
         public KVPair<K, V> next() {
-            // TODO Auto-generated method stub
+            
             KVPair<K, V> elem = current.forward[0].element();
             current = current.forward[0];
             return elem;
@@ -358,7 +359,7 @@ public class SkipList<K extends Comparable<? super K>, V>
 
     @Override
     public Iterator<KVPair<K, V>> iterator() {
-        // TODO Auto-generated method stub
+        
         return new SkipListIterator();
     }
 

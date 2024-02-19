@@ -80,7 +80,7 @@ public class Rectangle {
 
 
     /**
-     * Checks if the invoking rectangle intersects with rec.
+     * Checks if the invoking rectangle intersects with r2.
      * 
      * @param r2
      *            Rectangle parameter

@@ -40,6 +40,9 @@ public class CommandProcessorTest extends TestCase {
         // verify system output
         assertTrue(output.contains(
             "Rectangle inserted: (recName, 10, 20, 30, 40)"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // test incorret number of parameters
         String invalidCommand = "insert recName 10 20 30";
@@ -50,7 +53,10 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Incorrect number of parameters for 'insert' command\n"));
+            "Incorrect number of parameters for 'insert' command"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // test invalid parameters
         invalidCommand = "insert recName A B C D";
@@ -61,7 +67,7 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Invalid parameters for 'insert' command\n"));
+            "Invalid parameters for 'insert' command"));
 
     }
 
@@ -77,6 +83,9 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains("Rectangle not found: (recName)"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // call remove by parameters
         validCommand = "remove 1 1 1 1";
@@ -87,6 +96,9 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains("Rectangle not found: (1, 1, 1, 1)"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // test incorret number of parameters
         String invalidCommand = "remove recName A";
@@ -97,7 +109,10 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Incorrect number of parameters for 'remove' command\n"));
+            "Incorrect number of parameters for 'remove' command"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // test invalid parameters
         invalidCommand = "remove A B C D";
@@ -108,7 +123,7 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Invalid parameters for 'remove' command\n"));
+            "Invalid parameters for 'remove' command"));
 
     }
 
@@ -124,6 +139,9 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains("Rectangle not found: recName"));
+        
+        // clear output history
+        systemOut().clearHistory();
 
         // test incorret number of parameters
         String invalidCommand = "search recName A";
@@ -134,7 +152,7 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Incorrect number of parameters for 'search' command\n"));
+            "Incorrect number of parameters for 'search' command"));
 
     }
 
@@ -152,6 +170,10 @@ public class CommandProcessorTest extends TestCase {
         assertTrue(output.contains("SkipList dump:"));
         assertTrue(output.contains("Node has depth 1, Value (null)"));
         assertTrue(output.contains("SkipList size is: 0"));
+        
+        // clear output history
+        systemOut().clearHistory();
+
 
         // test incorret number of parameters
         String invalidCommand = "dump A";
@@ -162,7 +184,51 @@ public class CommandProcessorTest extends TestCase {
 
         // verify system output
         assertTrue(output.contains(
-            "Incorrect number of parameters for 'dump' command\n"));
+            "Incorrect number of parameters for 'dump' command"));
+    }
+    
+    public void testRegionSearch() {
+        
+        // valid search region command
+        String validCommand = "regionsearch 50 50 100 100";
+        cmdProc.processor(validCommand);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Rectangles intersecting region (50, 50, 100, 100):"));
+        
+        // clear output history
+        systemOut().clearHistory();
+
+
+        // test incorret number of parameters
+        String invalidCommand = "regionsearch 10 20 30";
+        cmdProc.processor(invalidCommand);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Incorrect number of parameters for 'regionsearch' command"));
+
+        // clear output history
+        systemOut().clearHistory();
+
+        
+        // test invalid parameters
+        invalidCommand = "regionsearch A B C D";
+        cmdProc.processor(invalidCommand);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Invalid parameters for 'regionsearch' command"));
     }
     
     public void testUnrecognizedCommand() {
@@ -175,7 +241,7 @@ public class CommandProcessorTest extends TestCase {
         String output = systemOut().getHistory();
         
         // verify system output
-        assertTrue(output.contains("Unrecognized command\n"));
+        assertTrue(output.contains("Unrecognized command"));
     }
 
 }

@@ -68,28 +68,27 @@ public class CommandProcessor {
 
                 }
                 catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters "
-                        + "for 'insert' command\n");
+                    System.out.printf("Invalid parameters "
+                        + "for 'insert' command%n");
                     e.printStackTrace();
                 }
             }
             else {
-                System.out.println("Incorrect number of "
-                    + "parameters for 'insert' command\n");
+                System.out.printf("Incorrect number of "
+                    + "parameters for 'insert' command%n");
             }
         }
         // calls the appropriate remove method based on the
         // number of white space delimited strings in the line
         else if (command.equals("remove")) {
             // checks the number of white space delimited strings in the line
-            int numParam = arr.length - 1;
-            if (numParam == 1) {
+            if (arr.length == 2) { // expect paramter: name
                 // Calls remove by name
                 String name = arr[1];
                 data.remove(name);
 
             }
-            else if (numParam == 4) {
+            else if (arr.length == 5) { // expected parameters: x, y, w, h
                 // Calls remove by coordinate, converting string
                 // integers into their Integer equivalent minus whitespace
                 try {
@@ -102,14 +101,14 @@ public class CommandProcessor {
 
                 }
                 catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters "
-                        + "for 'remove' command\n");
+                    System.out.printf("Invalid parameters "
+                        + "for 'remove' command%n");
                     e.printStackTrace();
                 }
             }
             else {
-                System.out.println("Incorrect number of parameters "
-                    + "for 'remove' command\n");
+                System.out.printf("Incorrect number of parameters "
+                    + "for 'remove' command%n");
             }
         }
         else if (command.equals("regionsearch")) {
@@ -126,14 +125,14 @@ public class CommandProcessor {
 
                 }
                 catch (NumberFormatException e) {
-                    System.out.println("Invalid parameters "
-                        + "for 'regionsearch' command\n");
+                    System.out.printf("Invalid parameters "
+                        + "for 'regionsearch' command%n");
                     e.printStackTrace();
                 }
             }
             else {
-                System.out.println("Incorrect number of parameters "
-                    + "for 'regionsearch' command\n");
+                System.out.printf("Incorrect number of parameters "
+                    + "for 'regionsearch' command%n");
             }
         }
         else if (command.equals("intersections")) {
@@ -144,8 +143,8 @@ public class CommandProcessor {
                 data.intersections();
             }
             else {
-                System.out.println("Invalid parameters "
-                    + "for 'intersection' command\n");
+                System.out.printf("Invalid parameters "
+                    + "for 'intersection' command%n");
             }
 
         }
@@ -156,8 +155,8 @@ public class CommandProcessor {
                 data.search(name);
             }
             else {
-                System.out.println("Incorrect number of parameters "
-                    + "for 'search' command\n");
+                System.out.printf("Incorrect number of parameters "
+                    + "for 'search' command%n");
             }
 
         }
@@ -169,8 +168,8 @@ public class CommandProcessor {
                 data.dump();
             }
             else {
-                System.out.println("Incorrect number of parameters "
-                    + "for 'dump' command\n");
+                System.out.printf("Incorrect number of parameters "
+                    + "for 'dump' command%n");
             }
 
         }
@@ -178,7 +177,7 @@ public class CommandProcessor {
             // the first white space delimited string in the line is not
             // one of the commands which can manipulate the database,
             // a message will be written to the console
-            System.out.println("Unrecognized command\n");
+            System.out.printf("Unrecognized command%n");
         }
     }
 
