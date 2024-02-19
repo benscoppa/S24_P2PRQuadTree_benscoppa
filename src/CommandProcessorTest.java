@@ -231,6 +231,33 @@ public class CommandProcessorTest extends TestCase {
             "Invalid parameters for 'regionsearch' command"));
     }
     
+    public void testIntersections() {
+        
+        // test valid intersections command
+        String validCommand = "intersections";
+        cmdProc.processor(validCommand);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("Intersection pairs:"));
+        
+        // clear output history
+        systemOut().clearHistory();
+
+        // test incorret number of parameters
+        String invalidCommand = "intersections A";
+        cmdProc.processor(invalidCommand);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Incorrect number of parameters for 'intersections' command"));
+    }
+    
     public void testUnrecognizedCommand() {
         
         // test unrecognized command

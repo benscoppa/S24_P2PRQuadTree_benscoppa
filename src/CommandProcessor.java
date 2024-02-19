@@ -143,8 +143,8 @@ public class CommandProcessor {
                 data.intersections();
             }
             else {
-                System.out.printf("Invalid parameters "
-                    + "for 'intersection' command%n");
+                System.out.printf("Incorrect number of parameters "
+                    + "for 'intersections' command%n");
             }
 
         }
