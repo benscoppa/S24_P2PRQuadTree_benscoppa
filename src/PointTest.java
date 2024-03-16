@@ -2,13 +2,12 @@
 import student.TestCase;
 
 /**
- * This class tests the methods of Rectangle class,
+ * This class tests the methods of Point class,
  * ensuring that they work as they should.
  * 
  * @author Ben Scoppa
  * @version 3/15/2024
  */
-
 public class PointTest extends TestCase {
 
     // base point and identical copy
