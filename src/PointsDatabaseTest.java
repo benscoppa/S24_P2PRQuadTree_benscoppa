@@ -14,7 +14,7 @@ import student.TestCase;
  * 
  * @version 2024-01-22
  */
-public class SkipListProjectTest extends TestCase {
+public class PointsDatabaseTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
@@ -36,7 +36,7 @@ public class SkipListProjectTest extends TestCase {
      */
     public void testMainNoArgs() {
         String[] testInput = {};
-        SkipListProject.main(testInput);
+        PointsDatabase.main(testInput);
         assertTrue(fuzzyContains(systemOut().getHistory(), "Invalid file"));
     }
 
@@ -57,7 +57,7 @@ public class SkipListProjectTest extends TestCase {
     public void testMain() throws IOException {
 
         // Creates an instance of SkipListProject
-        SkipListProject project = new SkipListProject();
+        PointsDatabase project = new PointsDatabase();
         project.toString();
 
         // Sets the test input file.
@@ -72,7 +72,7 @@ public class SkipListProjectTest extends TestCase {
         // The main method does NOT print anything console output right now
         // because in its current state it is missing all the necessary methods.
         // Those methods are for you to implement. :)
-        SkipListProject.main(testInput);
+        PointsDatabase.main(testInput);
 
         // TODO Sets the expected output.
         // Change this to the file that contains expected output.
