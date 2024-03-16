@@ -7,17 +7,16 @@
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <K>
- *            Key
- * @param <V>
- *            Value
+ * @param <String>
+ *            The name of the point
+ * @param <Point>
+ *            The actual point
  */
-public class InternalNode<K extends Comparable<? super K>, V>
-    implements QuadNode<K, V> {
+public class InternalNode implements QuadNode {
 
     // QuadNodes that represent the four quadrants and children of the internal
     // node.
-    private QuadNode<K, V> nw, ne, sw, se;
+    private QuadNode nw, ne, sw, se;
 
     /**
      * Creates an internal node and initializes its children to empty nodes.
@@ -30,25 +29,112 @@ public class InternalNode<K extends Comparable<? super K>, V>
 
     /**
      * When insert is called on an internal node the node finds its child which
-     * contains the point in the KVPair. It recursivly calls the
+     * contains the point in the KVPair. It recursivly calls the insert function
+     * one the approprite child node base its quadrant.
      * 
      * @param it
      *            the KVPair to be inserted
      * @param params
      *            object that stores the parameters of of the region
+     * 
+     * @return itself after one of its clidren has been recursivly called
      */
     @Override
-    public QuadNode<K, V> insert(KVPair<K, V> it, Params params) {
-        
+    public QuadNode insert(KVPair<String, Point> it, Params params) {
+
+        // get old region parameters
         int topLeftX = params.getX();
         int topLeftY = params.getY();
         int regionSize = params.getSize();
-        
-        int newRegionSize = regionSize/2;
-        
-        
 
-        return null;
+        // get the new region size for children
+        int newRegionSize = regionSize / 2;
+
+        // determine the approprite child node to call insert on then get the
+        // region parameters for that child
+        if (it.getValue().inRegion(topLeftX, topLeftY, newRegionSize)) {
+
+            Params newParams = new Params(topLeftX, topLeftY, newRegionSize);
+            nw = nw.insert(it, newParams);
+        }
+
+        else if (it.getValue().inRegion(topLeftX + newRegionSize, topLeftY,
+            newRegionSize)) {
+
+            Params newParams = new Params(topLeftX + newRegionSize, topLeftY,
+                newRegionSize);
+            ne = ne.insert(it, newParams);
+        }
+
+        else if (it.getValue().inRegion(topLeftX, topLeftY + newRegionSize,
+            newRegionSize)) {
+
+            Params newParams = new Params(topLeftX, topLeftY + newRegionSize,
+                newRegionSize);
+            sw = sw.insert(it, newParams);
+        }
+
+        else if (it.getValue().inRegion(topLeftX + newRegionSize, topLeftY
+            + newRegionSize, newRegionSize)) {
+
+            Params newParams = new Params(topLeftX + newRegionSize, topLeftY
+                + newRegionSize, newRegionSize);
+            se = se.insert(it, newParams);
+        }
+
+        // return itself
+        return this;
     }
 
+
+    /**
+     * When dump is called on an internal node the node it outputs information
+     * about itself the recursivly calls its children.
+     * 
+     * @param level
+     *            the current level of the QuadNode
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return itself after all of its clidren have been recursivly called
+     */
+    @Override
+    public int dump(int level, Params params) {
+
+        // get old region parameters
+        int topLeftX = params.getX();
+        int topLeftY = params.getY();
+        int regionSize = params.getSize();
+
+        // get the new region size for children
+        int newRegionSize = regionSize / 2;
+
+        // create the indent base on the level of the node
+        String indent = "  ".repeat(level);
+
+        // print out information obout this internal node
+        System.out.printf("%sNode at %d, %d, %d: Internal\n", indent, topLeftX,
+            topLeftY, regionSize);
+
+        // call the dump method on each of the children in preorder traverasl
+        // order
+        Params newParamsNW = new Params(topLeftX, topLeftY, newRegionSize);
+        int nwNodes = nw.dump(level + 1, newParamsNW);
+
+        Params newParamsNE = new Params(topLeftX + newRegionSize, topLeftY,
+            newRegionSize);
+        int neNodes = ne.dump(level + 1, newParamsNE);
+
+        Params newParamsSW = new Params(topLeftX, topLeftY + newRegionSize,
+            newRegionSize);
+        int swNodes = sw.dump(level + 1, newParamsSW);
+
+        Params newParamsSE = new Params(topLeftX + newRegionSize, topLeftY
+            + newRegionSize, newRegionSize);
+        int seNodes = se.dump(level + 1, newParamsSE);
+
+        // return the number of nodes visited through its children plus one for
+        // istself
+        return nwNodes + neNodes + swNodes + seNodes + 1;
+    }
 }

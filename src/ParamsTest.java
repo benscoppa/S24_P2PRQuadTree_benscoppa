@@ -15,7 +15,7 @@ public class ParamsTest extends TestCase{
     /**
      * Sets up the objects and initalizes them to their values
      */
-    public void setUp() throws Exception {
+    public void setUp() {
         params = new Params(1, 2, 3);
     }
 

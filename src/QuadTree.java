@@ -1,4 +1,3 @@
-import java.util.Iterator;
 
 /**
  * This class holds QuadTree class which handles the head of the QuadTree and
@@ -7,16 +6,18 @@ import java.util.Iterator;
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <K>
- *            Key
- * @param <V>
- *            Value
+ * @param <String>
+ *            The name of the point
+ * @param <Point>
+ *            The actual point
  */
-public class QuadTree<K extends Comparable<? super K>, V>
-    implements Iterable<KVPair<K, V>> {
+public class QuadTree {
 
     // the root of the QuadTree
-    private QuadNode<K, V> root;
+    private QuadNode root;
+    
+    // root level of the QuadTree
+    private static final int ROOT_LEVEL = 0;
 
     /**
      * Initializes the root of the tree point to the flynode which is an empty node
@@ -39,19 +40,21 @@ public class QuadTree<K extends Comparable<? super K>, V>
      * 
      * @param it
      *            the KVPair to be inserted
-     * @param worldParams
-     *            object that stores the parameters of of the world box
      */
-    public void insert(KVPair<K, V> it, Params worldParams) {
+    public void insert(KVPair<String, Point> it) {
         
-        root.insert(it, worldParams);
+        root = root.insert(it, worldParams);
     }
-
-
-    @Override
-    public Iterator<KVPair<K, V>> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+    
+    /**
+     * Calls the dump method on the QuadTree heaad node.
+     */
+    public void dump() {
+        
+        System.out.printf("QuadTree dump:\n");
+        
+        int nodeCount = 0;
+        nodeCount = root.dump(ROOT_LEVEL, worldParams);
+        System.out.printf("%d quadtree nodes printed", nodeCount);
     }
-
 }

@@ -7,18 +7,17 @@
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <K>
- *            Key
- * @param <V>
- *            Value
+ * @param <String>
+ *            The name of the point
+ * @param <Point>
+ *            The actual point
  */
-public class EmptyNode<K extends Comparable<? super K>, V>
-    implements QuadNode<K, V> {
+public class EmptyNode implements QuadNode {
 
-    private static final EmptyNode<?, ?> THE_FLYNODE = new EmptyNode<>();
+    private static final EmptyNode THE_FLYNODE = new EmptyNode();
 
     /**
-     * Empty node cannot be initialized
+     * Empty node cannot be initialized outside of the one flynode
      */
     private EmptyNode() {
 
@@ -30,10 +29,9 @@ public class EmptyNode<K extends Comparable<? super K>, V>
      * 
      * @return The Flynode
      */
-    @SuppressWarnings("unchecked")
-    public static <K extends Comparable<? super K>, V> EmptyNode<K, V> getInstance() {
+    public static EmptyNode getInstance() {
 
-        return (EmptyNode<K, V>)THE_FLYNODE;
+        return THE_FLYNODE;
     }
 
 
@@ -48,9 +46,39 @@ public class EmptyNode<K extends Comparable<? super K>, V>
      * @return the new leaf node
      */
     @Override
-    public QuadNode<K, V> insert(KVPair<K, V> it, Params params) {
+    public QuadNode insert(KVPair<String, Point> it, Params params) {
 
-        LeafNode<K, V> newLeafNode = new LeafNode<>(it);
-        return newLeafNode;
+        LeafNode newLeafNode = new LeafNode();
+        return newLeafNode.insert(it, params);
+    }
+
+
+    /**
+     * When dump is called on an empty node the node there is no output it just
+     * returns itself
+     * 
+     * @param level
+     *            the current level of the QuadNode
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return return one since a node was visited
+     */
+    @Override
+    public int dump(int level, Params params) {
+        
+        // get old region parameters
+        int topLeftX = params.getX();
+        int topLeftY = params.getY();
+        int regionSize = params.getSize();
+
+        // create the indent base on the level of the node
+        String indent = "  ".repeat(level);
+
+        // print out information obout this internal node
+        System.out.printf("%sNode at %d, %d, %d: Empty\n", indent, topLeftX,
+            topLeftY, regionSize);
+        
+        return 1;
     }
 }
