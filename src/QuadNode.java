@@ -13,15 +13,17 @@
  *            Value
  */
 public interface QuadNode<K extends Comparable<? super K>, V> {
-
+    
     /**
      * Inserts a KV pair into the QuadTree by being called recursivly on various
      * node types.
      * 
      * @param it
      *            the KVPair to be inserted
-     * @param worldParams
-     *            object that stores the parameters of of the world box
+     * @param params
+     *            object that stores the parameters of of the region
+     * @return 
      */
-    void insert(KVPair<K, V> it, Params worldParams);
+    QuadNode<K, V> insert(KVPair<K, V> it, Params params);
+
 }

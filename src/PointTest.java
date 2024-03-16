@@ -20,16 +20,26 @@ public class PointTest extends TestCase {
     // testing points with unequal parameters
     private Point diffrentXCoord;
     private Point diffrentYCoord;
-    
+
     // test invalid points and valid edge cases
     private Point negXCoord;
     private Point negYCoord;
-    
+
     private Point tooRight;
     private Point touchingRight;
 
     private Point tooDown;
     private Point touchingDown;
+    
+    // test points not in region and edge cases
+    private Point leftRegion;
+    private Point aboveRegion;
+    
+    private Point rightRegion;
+    private Point touchingRightRegion;
+
+    private Point belowRegion;
+    private Point touchingBottomRegion;
 
     /**
      * Sets up the point objects and initalizes them to their values
@@ -88,7 +98,8 @@ public class PointTest extends TestCase {
         assertFalse(pt.equals(diffrentYCoord));
 
     }
-    
+
+
     /**
      * test the toString function
      */
@@ -97,13 +108,15 @@ public class PointTest extends TestCase {
         assertFuzzyEquals(pt.toString(), "500, 600");
 
     }
-    
+
+
     /**
      * test the isInvalid function for points that violate the word box as
      * Also test points that are valid.
      */
     public void testIsInvalid() {
 
+        // test negative coordinates
         negXCoord = new Point(-1, 1);
         assertTrue(negXCoord.isInvalid());
 
@@ -122,5 +135,32 @@ public class PointTest extends TestCase {
 
         touchingDown = new Point(1, 1024);
         assertFalse(touchingDown.isInvalid());
+    }
+
+
+    /**
+     * test the inRegion function for points that violate are and are not in the
+     * region
+     */
+    public void testInRegion() {
+        
+        // test points outside of region and edge cases
+        leftRegion = new Point(1, 15);
+        assertFalse(leftRegion.inRegion(10, 10, 10));
+
+        aboveRegion = new Point(15, 1);
+        assertFalse(aboveRegion.inRegion(10, 10, 10));
+
+        rightRegion = new Point(40, 15);
+        assertFalse(rightRegion.inRegion(10, 10, 10));
+
+        touchingRightRegion = new Point(20, 15);
+        assertTrue(touchingRightRegion.inRegion(10, 10, 10));
+
+        belowRegion = new Point(15, 40);
+        assertFalse(belowRegion.inRegion(10, 10, 10));
+
+        touchingBottomRegion = new Point(15, 20);
+        assertTrue(touchingBottomRegion.inRegion(10, 10, 10));
     }
 }

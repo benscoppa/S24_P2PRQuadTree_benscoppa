@@ -15,14 +15,14 @@ import java.util.Iterator;
 public class QuadTree<K extends Comparable<? super K>, V>
     implements Iterable<KVPair<K, V>> {
 
-    private int level;
-    // TODO initialize head
+    // the root of the QuadTree
+    private QuadNode<K, V> root;
 
     /**
-     * Initializes the fields head level
+     * Initializes the root of the tree point to the flynode which is an empty node
      */
     public QuadTree() {
-        level = 0;
+        root = EmptyNode.getInstance();
     }
 
     // world box paramters
@@ -43,7 +43,8 @@ public class QuadTree<K extends Comparable<? super K>, V>
      *            object that stores the parameters of of the world box
      */
     public void insert(KVPair<K, V> it, Params worldParams) {
-
+        
+        root.insert(it, worldParams);
     }
 
 

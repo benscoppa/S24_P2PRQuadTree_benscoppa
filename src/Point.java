@@ -126,4 +126,38 @@ public class Point {
         return false;
     }
 
+
+    /**
+     * Checks if the point is inside of a region
+     * 
+     * @param x
+     *            top left x cordinate of region
+     * @param y
+     *            top left y cordinate of region
+     * @param size
+     *            the size of the region
+     * 
+     * @return true if the point is inside the region, false if not
+     */
+    public boolean inRegion(int x, int y, int size) {
+
+        // check all sides of the region to see if the point is in the region
+        if (xCoordinate < x) {
+            return false;
+        }
+
+        if (yCoordinate < y) {
+            return false;
+        }
+
+        if (xCoordinate > x + size) {
+            return false;
+        }
+
+        if (yCoordinate > y + size) {
+            return false;
+        }
+
+        return true;
+    }
 }
