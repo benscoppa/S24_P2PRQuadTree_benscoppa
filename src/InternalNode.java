@@ -49,6 +49,8 @@ public class InternalNode implements QuadNode {
 
         // get the new region size for children
         int newRegionSize = regionSize / 2;
+        int middleX = topLeftX + newRegionSize;
+        int middleY = topLeftY + newRegionSize;
 
         // determine the approprite child node to call insert on then get the
         // region parameters for that child
@@ -58,27 +60,21 @@ public class InternalNode implements QuadNode {
             nw = nw.insert(it, newParams);
         }
 
-        else if (it.getValue().inRegion(topLeftX + newRegionSize, topLeftY,
-            newRegionSize)) {
+        else if (it.getValue().inRegion(middleX, topLeftY, newRegionSize)) {
 
-            Params newParams = new Params(topLeftX + newRegionSize, topLeftY,
-                newRegionSize);
+            Params newParams = new Params(middleX, topLeftY, newRegionSize);
             ne = ne.insert(it, newParams);
         }
 
-        else if (it.getValue().inRegion(topLeftX, topLeftY + newRegionSize,
-            newRegionSize)) {
+        else if (it.getValue().inRegion(topLeftX, middleY, newRegionSize)) {
 
-            Params newParams = new Params(topLeftX, topLeftY + newRegionSize,
-                newRegionSize);
+            Params newParams = new Params(topLeftX, middleY, newRegionSize);
             sw = sw.insert(it, newParams);
         }
 
-        else if (it.getValue().inRegion(topLeftX + newRegionSize, topLeftY
-            + newRegionSize, newRegionSize)) {
+        else if (it.getValue().inRegion(middleX, middleY, newRegionSize)) {
 
-            Params newParams = new Params(topLeftX + newRegionSize, topLeftY
-                + newRegionSize, newRegionSize);
+            Params newParams = new Params(middleX, middleY, newRegionSize);
             se = se.insert(it, newParams);
         }
 
@@ -108,6 +104,9 @@ public class InternalNode implements QuadNode {
 
         // get the new region size for children
         int newRegionSize = regionSize / 2;
+        int middleX = topLeftX + newRegionSize;
+        int middleY = topLeftY + newRegionSize;
+        int newLevel = level + 1;
 
         // create the indent base on the level of the node
         String indent = "  ".repeat(level);
@@ -119,19 +118,16 @@ public class InternalNode implements QuadNode {
         // call the dump method on each of the children in preorder traverasl
         // order
         Params newParamsNW = new Params(topLeftX, topLeftY, newRegionSize);
-        int nwNodes = nw.dump(level + 1, newParamsNW);
+        int nwNodes = nw.dump(newLevel, newParamsNW);
 
-        Params newParamsNE = new Params(topLeftX + newRegionSize, topLeftY,
-            newRegionSize);
-        int neNodes = ne.dump(level + 1, newParamsNE);
+        Params newParamsNE = new Params(middleX, topLeftY, newRegionSize);
+        int neNodes = ne.dump(newLevel, newParamsNE);
 
-        Params newParamsSW = new Params(topLeftX, topLeftY + newRegionSize,
-            newRegionSize);
-        int swNodes = sw.dump(level + 1, newParamsSW);
+        Params newParamsSW = new Params(topLeftX, middleY, newRegionSize);
+        int swNodes = sw.dump(newLevel, newParamsSW);
 
-        Params newParamsSE = new Params(topLeftX + newRegionSize, topLeftY
-            + newRegionSize, newRegionSize);
-        int seNodes = se.dump(level + 1, newParamsSE);
+        Params newParamsSE = new Params(middleX, middleY, newRegionSize);
+        int seNodes = se.dump(newLevel, newParamsSE);
 
         // return the number of nodes visited through its children plus one for
         // istself

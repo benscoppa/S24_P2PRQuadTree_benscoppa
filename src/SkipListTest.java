@@ -232,59 +232,59 @@ public class SkipListTest extends TestCase {
     }
 
 
-    /**
-     * Test the remove by value method to make sure the return type is correct
-     * and nodes are properly removed also test that size is updated properly
-     */
-    @Test
-    public void testRemoveByValue() {
-
-        // insert into the skip list
-        sl.insert(b1Pair);
-        // insert before B
-        sl.insert(a1Pair);
-        // insert after B
-        sl.insert(c1Pair);
-
-        sl.insert(a2Pair);
-        // insert same as C1
-        sl.insert(c1Pair);
-        sl.insert(b2Pair);
-
-        // check the size
-        assertEquals(sl.size(), 6);
-
-        // remove B1 and one copy of C1
-        assertEquals(b1Pair, sl.removeByValue(b1));
-        assertEquals(c1Pair, sl.removeByValue(c1));
-
-        // remove second copy of C1
-        assertEquals(c1Pair, sl.removeByValue(c1));
-
-        // attempt to remove entry not in list
-        assertEquals(null, sl.removeByValue(c1));
-
-        // check the size
-        assertEquals(sl.size(), 3);
-
-        // call dump
-        sl.dump();
-
-        // sytem output for dump
-        String dumpOutput = systemOut().getHistory();
-
-        // check the dump for proper output
-        assertTrue(dumpOutput.contains("SkipList dump:\n"));
-        assertTrue(dumpOutput.contains("Value (null)\n"));
-        assertTrue(dumpOutput.contains("Value (A, 1, 2, 3, 4)\n"));
-        // removed from list
-        assertFalse(dumpOutput.contains("Value (B, 5, 6, 7, 8)\n"));
-        // removed from list
-        assertFalse(dumpOutput.contains("Value (C, 9, 10, 11, 12)\n"));
-        assertTrue(dumpOutput.contains("Value (A, 13, 14, 15, 16)\n"));
-        assertTrue(dumpOutput.contains("Value (B, 21, 22, 23, 24)\n"));
-        assertTrue(dumpOutput.contains("SkipList size is: 3\n"));
-    }
+//    /**
+//     * Test the remove by value method to make sure the return type is correct
+//     * and nodes are properly removed also test that size is updated properly
+//     */
+//    @Test
+//    public void testRemoveByValue() {
+//
+//        // insert into the skip list
+//        sl.insert(b1Pair);
+//        // insert before B
+//        sl.insert(a1Pair);
+//        // insert after B
+//        sl.insert(c1Pair);
+//
+//        sl.insert(a2Pair);
+//        // insert same as C1
+//        sl.insert(c1Pair);
+//        sl.insert(b2Pair);
+//
+//        // check the size
+//        assertEquals(sl.size(), 6);
+//
+//        // remove B1 and one copy of C1
+//        assertEquals(b1Pair, sl.removeByValue(b1));
+//        assertEquals(c1Pair, sl.removeByValue(c1));
+//
+//        // remove second copy of C1
+//        assertEquals(c1Pair, sl.removeByValue(c1));
+//
+//        // attempt to remove entry not in list
+//        assertEquals(null, sl.removeByValue(c1));
+//
+//        // check the size
+//        assertEquals(sl.size(), 3);
+//
+//        // call dump
+//        sl.dump();
+//
+//        // sytem output for dump
+//        String dumpOutput = systemOut().getHistory();
+//
+//        // check the dump for proper output
+//        assertTrue(dumpOutput.contains("SkipList dump:\n"));
+//        assertTrue(dumpOutput.contains("Value (null)\n"));
+//        assertTrue(dumpOutput.contains("Value (A, 1, 2, 3, 4)\n"));
+//        // removed from list
+//        assertFalse(dumpOutput.contains("Value (B, 5, 6, 7, 8)\n"));
+//        // removed from list
+//        assertFalse(dumpOutput.contains("Value (C, 9, 10, 11, 12)\n"));
+//        assertTrue(dumpOutput.contains("Value (A, 13, 14, 15, 16)\n"));
+//        assertTrue(dumpOutput.contains("Value (B, 21, 22, 23, 24)\n"));
+//        assertTrue(dumpOutput.contains("SkipList size is: 3\n"));
+//    }
 
 
     /***

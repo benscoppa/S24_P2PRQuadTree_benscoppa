@@ -29,6 +29,9 @@ public class QuadTreeTest extends TestCase {
     Point p6;
     Point p7;
     Point p8;
+    Point p9;
+    Point p10;
+    Point p11;
 
     KVPair<String, Point> p1Pair;
     KVPair<String, Point> p2Pair;
@@ -38,6 +41,9 @@ public class QuadTreeTest extends TestCase {
     KVPair<String, Point> p6Pair;
     KVPair<String, Point> p7Pair;
     KVPair<String, Point> p8Pair;
+    KVPair<String, Point> p9Pair;
+    KVPair<String, Point> p10Pair;
+    KVPair<String, Point> p11Pair;
 
     /**
      * Sets up Points, KVPairs and QuadTree to be used for testing along with
@@ -58,6 +64,9 @@ public class QuadTreeTest extends TestCase {
         p6 = new Point(1, 10);
         p7 = new Point(400, 400);
         p8 = new Point(500, 500);
+        p9 = new Point(1000, 10);
+        p10 = new Point(400, 1000);
+        p11 = new Point(900, 900);
 
         p1Pair = new KVPair<String, Point>("p1", p1);
         p2Pair = new KVPair<String, Point>("p2", p2);
@@ -67,6 +76,9 @@ public class QuadTreeTest extends TestCase {
         p6Pair = new KVPair<String, Point>("p6", p6);
         p7Pair = new KVPair<String, Point>("p7", p7);
         p8Pair = new KVPair<String, Point>("p8", p8);
+        p9Pair = new KVPair<String, Point>("p9", p9);
+        p10Pair = new KVPair<String, Point>("p10", p10);
+        p11Pair = new KVPair<String, Point>("p11", p11);
     }
 
 
@@ -113,6 +125,9 @@ public class QuadTreeTest extends TestCase {
         tree.insert(p6Pair);
         tree.insert(p7Pair);
         tree.insert(p8Pair);
+        tree.insert(p9Pair);
+        tree.insert(p10Pair);
+        tree.insert(p11Pair);
 
         tree.dump();
 
@@ -131,10 +146,13 @@ public class QuadTreeTest extends TestCase {
             + "    (p8, 500, 500)\n"
             + "  Node at 512, 0, 512:\n"
             + "  (p2, 1000, 2)\n"
+            + "  (p9, 1000, 10)\n"
             + "  Node at 0, 512, 512:\n"
             + "  (p3, 1, 1000)\n"
+            + "  (p10, 400, 1000)\n"
             + "  Node at 512, 512, 512:\n"
             + "  (p4, 1000, 1000)\n"
+            + "  (p11, 900, 900)\n"
             + "9 quadtree nodes printed\n";
 
         // make sure expected output matches the real output
