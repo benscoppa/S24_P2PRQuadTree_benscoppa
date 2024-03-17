@@ -146,18 +146,14 @@ public class Point {
             return false;
         }
 
-        if (yCoordinate < y) {
+        else if (yCoordinate < y) {
             return false;
         }
 
-        if (xCoordinate > x + size) {
+        else if (xCoordinate > x + size) {
             return false;
         }
 
-        if (yCoordinate > y + size) {
-            return false;
-        }
-
-        return true;
+        return !(yCoordinate > y + size);
     }
 }

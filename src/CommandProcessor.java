@@ -60,17 +60,15 @@ public class CommandProcessor {
         // their Integer equivalent, trimming the whitespace
         if (command.equals("insert")) {
             // Calls insert
-            if (arr.length == 6) { // expected parameters: name x y w h
+            if (arr.length == 4) { // expected parameters: name x y
                 try {
                     String name = arr[1];
                     int x = Integer.parseInt(arr[2]);
                     int y = Integer.parseInt(arr[3]);
-                    int w = Integer.parseInt(arr[4]);
-                    int h = Integer.parseInt(arr[5]);
 
-                    // create a rectangle object
-                    Rectangle rect = new Rectangle(x, y, w, h);
-                    KVPair<String, Rectangle> pair = new KVPair<>(name, rect);
+                    // create a point object object
+                    Point pt = new Point(x, y);
+                    KVPair<String, Point> pair = new KVPair<>(name, pt);
                     data.insert(pair);
 
                 }
@@ -96,16 +94,14 @@ public class CommandProcessor {
                 data.remove(name);
 
             }
-            else if (arr.length == 5) { // expected parameters: x, y, w, h
+            else if (arr.length == 3) { // expected parameters: x, y
                 // Calls remove by coordinate, converting string
                 // integers into their Integer equivalent minus whitespace
                 try {
                     int x = Integer.parseInt(arr[1]);
                     int y = Integer.parseInt(arr[2]);
-                    int w = Integer.parseInt(arr[3]);
-                    int h = Integer.parseInt(arr[4]);
 
-                    data.remove(x, y, w, h);
+                    data.remove(x, y);
 
                 }
                 catch (NumberFormatException e) {
@@ -143,16 +139,16 @@ public class CommandProcessor {
                     + "for 'regionsearch' command%n");
             }
         }
-        else if (command.equals("intersections")) {
-            // calls the intersections method, no parameters to be passed
-            // (see the intersections JavaDoc in the Database class for
+        else if (command.equals("duplicates")) {
+            // calls the duplicates method, no parameters to be passed
+            // (see the duplicates JavaDoc in the Database class for
             // more information)
             if (arr.length == 1) { // no expected parameters
-                data.intersections();
+                data.duplicates();
             }
             else {
                 System.out.printf("Incorrect number of parameters "
-                    + "for 'intersections' command%n");
+                    + "for 'duplicates' command%n");
             }
 
         }

@@ -20,7 +20,7 @@ public class LeafNode implements QuadNode {
     private LinkedList<KVPair<String, Point>> region;
 
     /**
-     * Initializes a skiplist for storing points in the region 
+     * Initializes a skiplist for storing points in the region
      */
     public LeafNode() {
         region = new LinkedList<>();
@@ -50,7 +50,7 @@ public class LeafNode implements QuadNode {
         if (region.size() > 3) {
             // if not all of the points are equal create new internal node
             for (KVPair<String, Point> currentPair : region) {
-                if (!currentPair.equals(it)) {
+                if (!(currentPair.getValue().equals(it.getValue()))) {
                     sameElements = false;
                     break;
                 }
@@ -106,6 +106,117 @@ public class LeafNode implements QuadNode {
         }
 
         return 1;
+    }
+
+
+    /**
+     * When the remove method is called on a leaf node the point is remove from
+     * the node if it is found.
+     * 
+     * @param pt
+     *            the point to remove
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return QuadNodes recursivly
+     */
+    @Override
+    public RemoveResult remove(Point pt, Params params, String name) {
+
+        String ptName = "Not Found";
+
+        // remove the point making sure the name matches as well
+        if (!name.equals("0")) {
+            for (KVPair<String, Point> currentPair : region) {
+                if (currentPair.getValue().equals(pt)) {
+                    ptName = currentPair.getKey();
+                    // double check the name also
+                    if (name.equals(ptName)) {
+                        // remove the pair from the point
+                        region.remove(currentPair);
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            // try to find the point base on value alone
+            for (KVPair<String, Point> currentPair : region) {
+                if (currentPair.getValue().equals(pt)) {
+                    ptName = currentPair.getKey();
+                    // remove the pair from the point
+                    region.remove(currentPair);
+                    break;
+                }
+            }
+        }
+
+        // if the region is now empty replace the leaf node with an empty node
+        if (region.isEmpty()) {
+            QuadNode newEmptyNode = EmptyNode.getInstance();
+            // return the new empty node, removed point name and empty list of
+            // points
+            RemoveResult result = new RemoveResult(newEmptyNode, ptName);
+            return result;
+        }
+
+        // otherwise return this leaf node, the removed point name and the
+        // points in this region
+        RemoveResult result = new RemoveResult(this, ptName);
+        return result;
+    }
+
+
+    /**
+     * get the points contained in the leaf node.
+     * 
+     * @return the points contained within this region
+     */
+    @Override
+    public LinkedList<KVPair<String, Point>> getPoints() {
+
+        return region;
+    }
+
+
+    /**
+     * When duplicates is called on a leaf node it checks for duplicates in the
+     * leaf and prints them to console.
+     * 
+     * @return itself recursivly
+     */
+    @Override
+    public QuadNode duplicates() {
+        // stores the dupliacte points
+        LinkedList<Point> printedDuplicates = new LinkedList<>();
+
+        // outer loop that getas a pair from the region
+        for (KVPair<String, Point> currentPair : region) {
+            
+            // make sure the duplicate wasnt already printed
+            if (printedDuplicates.contains(currentPair.getValue())) {
+                continue;
+            }
+            
+            // compare this pair to every other point in the region
+            for (KVPair<String, Point> comparePair : region) {
+                // if the values are duplicate but it is not itself
+                if (currentPair.getValue().equals(comparePair.getValue())
+                    && !currentPair.equals(comparePair)) {
+                    
+                    // add to list of duplicate points
+                    printedDuplicates.add(currentPair.getValue());
+
+                    // print the dupliacte to console
+                    System.out.printf("%s\n", currentPair.getValue()
+                        .toString());
+                    break;
+                }
+            }
+        }
+
+        // return itself recursivly
+        return this;
     }
 
 }

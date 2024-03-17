@@ -144,7 +144,6 @@ public class SkipList<K extends Comparable<? super K>, V>
      * @param newLevel
      *            the number of levels to be added to head
      */
-    @SuppressWarnings("unchecked")
     public void adjustHead(int newLevel) {
 
         // create new head node with more levels
@@ -215,10 +214,12 @@ public class SkipList<K extends Comparable<? super K>, V>
      * 
      * @param val
      *            the value of the KVPair to be removed
+     * @param key
+     *            the key of the KVPair to be removed
      * @return returns the removed pair if the pair was valid and null if not
      */
     @SuppressWarnings("unchecked")
-    public KVPair<K, V> removeByValue(V val) {
+    public KVPair<K, V> removeByValue(V val, K key) {
 
         // create a new update array
         SkipNode[] update = (SkipNode[])Array.newInstance(
@@ -227,11 +228,13 @@ public class SkipList<K extends Comparable<? super K>, V>
         // start the search at the head
         SkipNode searchNode = head;
 
-        // find key to remove position by comparing the value of it to those in
-        // the list and add to the update array
+        // find key to remove position by comparing the key and value to those
+        // in the list and add to the updatee array
         for (int i = head.level; i >= 0; i--) {
-            while (searchNode.forward[i] != null && !val.equals(
-                searchNode.forward[i].pair.getValue())) {
+            while (searchNode.forward[i] != null && (searchNode.forward[i]
+                .element().getKey().compareTo(key) < 0 || (searchNode.forward[i]
+                    .element().getKey().equals(key) && !searchNode.forward[i]
+                        .element().getValue().equals(val)))) {
                 searchNode = searchNode.forward[i];
             }
             update[i] = searchNode;
@@ -240,8 +243,9 @@ public class SkipList<K extends Comparable<? super K>, V>
         // check next node
         searchNode = searchNode.forward[0];
 
-        if (searchNode != null && val.equals(searchNode.pair.getValue())) {
-            // remove the node and update pointers
+        // make sure the search node is the node to be removed
+        if (searchNode != null && searchNode.element().getKey().equals(key)
+            && searchNode.element().getValue().equals(val)) {
             for (int i = 0; i <= head.level; i++) {
                 // make sure the pointer being overwritten
                 // is the node to remove

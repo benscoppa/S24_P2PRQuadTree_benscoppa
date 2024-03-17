@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 
 /**
  * This class handles Empty nodes of the QuadTree. In overrides the methods
@@ -66,7 +67,7 @@ public class EmptyNode implements QuadNode {
      */
     @Override
     public int dump(int level, Params params) {
-        
+
         // get old region parameters
         int topLeftX = params.getX();
         int topLeftY = params.getY();
@@ -78,7 +79,52 @@ public class EmptyNode implements QuadNode {
         // print out information obout this internal node
         System.out.printf("%sNode at %d, %d, %d: Empty\n", indent, topLeftX,
             topLeftY, regionSize);
-        
+
         return 1;
+    }
+
+
+    /**
+     * When the remove method is called on an empty node it means point was not
+     * found and cannot be removed.
+     * 
+     * @param pt
+     *            the point to remove
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return QuadNodes recursivly
+     */
+    @Override
+    public RemoveResult remove(Point pt, Params params, String name) {
+
+        RemoveResult result = new RemoveResult(this, "Not Found");
+        return result;
+    }
+
+
+    /**
+     * get the points contained in the empty node with is always none.
+     * 
+     * @return empty linked list since there are no points
+     */
+    @Override
+    public LinkedList<KVPair<String, Point>> getPoints() {
+
+        LinkedList<KVPair<String, Point>> points = new LinkedList<>();
+        return points;
+    }
+
+
+    /**
+     * When duplicates is called on an empty node it just returns itself since
+     * there are no points.
+     * 
+     * @return itself recursivly
+     */
+    @Override
+    public QuadNode duplicates() {
+
+        return this;
     }
 }

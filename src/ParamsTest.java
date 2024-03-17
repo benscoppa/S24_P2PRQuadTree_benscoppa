@@ -10,7 +10,7 @@ import student.TestCase;
  */
 public class ParamsTest extends TestCase{
     
-    Params params;
+    private Params params;
     
     /**
      * Sets up the objects and initalizes them to their values

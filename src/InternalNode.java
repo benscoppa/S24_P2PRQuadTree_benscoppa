@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 
 /**
  * This class handles Internal nodes of the QuadTree. In overrides the methods
@@ -23,7 +24,10 @@ public class InternalNode implements QuadNode {
      * These empty nodes are really just the same flyweight node.
      */
     public InternalNode() {
-        nw = ne = sw = se = EmptyNode.getInstance();
+        nw = EmptyNode.getInstance();
+        ne = EmptyNode.getInstance();
+        sw = EmptyNode.getInstance();
+        se = EmptyNode.getInstance();
     }
 
 
@@ -132,5 +136,230 @@ public class InternalNode implements QuadNode {
         // return the number of nodes visited through its children plus one for
         // istself
         return nwNodes + neNodes + swNodes + seNodes + 1;
+    }
+
+
+    /**
+     * The remove method for an internal node. Find the child node where the
+     * node to remove would exist and calls remove recursivly on this child.
+     * 
+     * @param pt
+     *            the point to remove
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return QuadNodes recursivly
+     */
+    @Override
+    public RemoveResult remove(Point pt, Params params, String name) {
+
+        // get old region parameters
+        int topLeftX = params.getX();
+        int topLeftY = params.getY();
+        int regionSize = params.getSize();
+
+        // get the new region size for children
+        int newRegionSize = regionSize / 2;
+        int middleX = topLeftX + newRegionSize;
+        int middleY = topLeftY + newRegionSize;
+
+        // stores the removed point or failure if ther is none
+        String removedPt = "";
+
+        // determine the approprite child node to call remove on then get the
+        // region parameters for that child
+        if (pt.inRegion(topLeftX, topLeftY, newRegionSize)) {
+
+            Params newParams = new Params(topLeftX, topLeftY, newRegionSize);
+            RemoveResult nwRemoved = nw.remove(pt, newParams, name);
+            nw = nwRemoved.getUpdatedNode();
+            removedPt = nwRemoved.getRemovedPointName();
+        }
+
+        else if (pt.inRegion(middleX, topLeftY, newRegionSize)) {
+
+            Params newParams = new Params(middleX, topLeftY, newRegionSize);
+            RemoveResult neRemoved = ne.remove(pt, newParams, name);
+            ne = neRemoved.getUpdatedNode();
+            removedPt = neRemoved.getRemovedPointName();
+        }
+
+        else if (pt.inRegion(topLeftX, middleY, newRegionSize)) {
+
+            Params newParams = new Params(topLeftX, middleY, newRegionSize);
+            RemoveResult swRemoved = sw.remove(pt, newParams, name);
+            sw = swRemoved.getUpdatedNode();
+            removedPt = swRemoved.getRemovedPointName();
+        }
+
+        else if (pt.inRegion(middleX, middleY, newRegionSize)) {
+
+            Params newParams = new Params(middleX, middleY, newRegionSize);
+            RemoveResult seRemoved = se.remove(pt, newParams, name);
+            se = seRemoved.getUpdatedNode();
+            removedPt = seRemoved.getRemovedPointName();
+        }
+
+        // check to see if the internal node should become a leaf node
+        LinkedList<KVPair<String, Point>> childsPoints = new LinkedList<>();
+
+        childsPoints.addAll(nw.getPoints());
+        childsPoints.addAll(ne.getPoints());
+        childsPoints.addAll(sw.getPoints());
+        childsPoints.addAll(se.getPoints());
+
+        boolean sameElements = true;
+
+        // if there are more than 3 points in all of the children
+        if (childsPoints.size() > 3) {
+            // if not all of the points are equal keep this internal node
+            KVPair<String, Point> firstEntry = childsPoints.getFirst();
+            for (KVPair<String, Point> currentPair : childsPoints) {
+                if (!currentPair.equals(firstEntry)) {
+                    sameElements = false;
+                    break;
+                }
+            }
+            // keep this internal node
+            if (!sameElements) {
+                RemoveResult result = new RemoveResult(this, removedPt);
+                // return itself, and the name of removed point
+                return result;
+            }
+        }
+
+        // otherwise turn the internal node into a leaf node
+        LeafNode newLeafNode = new LeafNode();
+        for (KVPair<String, Point> currentPair : childsPoints) {
+            newLeafNode.insert(currentPair, params);
+        }
+
+        // return the new leaf node and the name of the removed point
+        RemoveResult result = new RemoveResult(newLeafNode, removedPt);
+        return result;
+    }
+
+
+    /**
+     * get the points contained in the internal node with is always none.
+     * 
+     * @return empty linked list since there are no points
+     */
+    @Override
+    public LinkedList<KVPair<String, Point>> getPoints() {
+
+        LinkedList<KVPair<String, Point>> childsPoints = new LinkedList<>();
+
+        childsPoints.addAll(nw.getPoints());
+        childsPoints.addAll(ne.getPoints());
+        childsPoints.addAll(sw.getPoints());
+        childsPoints.addAll(se.getPoints());
+        return childsPoints;
+    }
+
+
+    /**
+     * When duplicates is called on an internal node recursivly calls duplicates
+     * on each of its children.
+     * 
+     * @return itself recursivly
+     */
+    @Override
+    public QuadNode duplicates() {
+
+        // call the duplicates method on each of the children in preorder
+        // traverasl order
+        nw.duplicates();
+
+        ne.duplicates();
+
+        sw.duplicates();
+
+        se.duplicates();
+
+        // return itself
+        return this;
+    }
+
+
+    /**
+     * When regionSearch is called on an internal node it calls regionSearch
+     * recursivly on all of its children whos regions intersect with the search
+     * region.
+     * 
+     * @param searchRegion
+     *            a rectangle object that contains the region to search for
+     *            points in within the QuadTree.
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return a linked list of all the points in the search region
+     */
+    @Override
+    public LinkedList<KVPair<String, Point>> regionSearch(
+        Rectangle searchRegion,
+        Params params) {
+
+        // get old region parameters
+        int topLeftX = params.getX();
+        int topLeftY = params.getY();
+        int regionSize = params.getSize();
+
+        // get the new region size for children
+        int newRegionSize = regionSize / 2;
+        int middleX = topLeftX + newRegionSize;
+        int middleY = topLeftY + newRegionSize;
+
+        Rectangle nwRec = new Rectangle(topLeftX, topLeftY, newRegionSize,
+            newRegionSize);
+        Rectangle neRec = new Rectangle(middleX, topLeftY, newRegionSize,
+            newRegionSize);
+        Rectangle swRec = new Rectangle(topLeftX, middleY, newRegionSize,
+            newRegionSize);
+        Rectangle seRec = new Rectangle(middleX, middleY, newRegionSize,
+            newRegionSize);
+
+        // stores all the intersect points covered by the internal node
+        LinkedList<KVPair<String, Point>> allPoints = new LinkedList<>();
+
+        // determine the approprite child nodes to call regionSearch on then get
+        // the region parameters for that child
+        // also adds the points in the region within the child to the list of
+        // all points in the internal node.
+        if (searchRegion.intersect(nwRec)) {
+
+            Params newParams = new Params(topLeftX, topLeftY, newRegionSize);
+            LinkedList<KVPair<String, Point>> nwPoints = nw.regionSearch(
+                searchRegion, newParams);
+            allPoints.addAll(nwPoints);
+        }
+
+        if (searchRegion.intersect(neRec)) {
+
+            Params newParams = new Params(middleX, topLeftY, newRegionSize);
+            LinkedList<KVPair<String, Point>> nePoints = ne.regionSearch(
+                searchRegion, newParams);
+            allPoints.addAll(nePoints);
+        }
+
+        if (searchRegion.intersect(swRec)) {
+
+            Params newParams = new Params(topLeftX, middleY, newRegionSize);
+            LinkedList<KVPair<String, Point>> swPoints = sw.regionSearch(
+                searchRegion, newParams);
+            allPoints.addAll(swPoints);
+        }
+
+        if (searchRegion.intersect(seRec)) {
+
+            Params newParams = new Params(middleX, middleY, newRegionSize);
+            LinkedList<KVPair<String, Point>> sePoints = se.regionSearch(
+                searchRegion, newParams);
+            allPoints.addAll(sePoints);
+        }
+
+        // return all the points in the search region covered by this internal
+        // node.
+        return allPoints;
     }
 }

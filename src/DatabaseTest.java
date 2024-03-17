@@ -16,31 +16,31 @@ public class DatabaseTest extends TestCase {
     private Database data;
 
     // rectangles and pairs for testing methods that are in skiplist also
-    private Rectangle invalidRec;
-    private Rectangle validRec;
-    private Rectangle validRec2;
+    private Point invalidPt;
+    private Point validPt;
+    private Point validPt2;
 
-    private KVPair<String, Rectangle> invalidPair;
-    private KVPair<String, Rectangle> validPair;
-    private KVPair<String, Rectangle> validPair2;
+    private KVPair<String, Point> invalidPair;
+    private KVPair<String, Point> validPair;
+    private KVPair<String, Point> validPair2;
 
-    // rectangles and pairs for testing searchRegion
-    private Rectangle inRegionRec1;
-    private Rectangle inRegionRec2;
-    private Rectangle notInRegionRec;
-
-    private KVPair<String, Rectangle> inRegionPair1;
-    private KVPair<String, Rectangle> inRegionPair2;
-    private KVPair<String, Rectangle> notInRegionPair;
-
-    // rectnagles and pairs for testing intersections
-    private Rectangle intersectRec1;
-    private Rectangle intersectRec2;
-    private Rectangle intersectRec3;
-
-    private KVPair<String, Rectangle> intersectPair1;
-    private KVPair<String, Rectangle> intersectPair2;
-    private KVPair<String, Rectangle> intersectPair3;
+// // rectangles and pairs for testing searchRegion
+// private Rectangle inRegionRec1;
+// private Rectangle inRegionRec2;
+// private Rectangle notInRegionRec;
+//
+// private KVPair<String, Rectangle> inRegionPair1;
+// private KVPair<String, Rectangle> inRegionPair2;
+// private KVPair<String, Rectangle> notInRegionPair;
+//
+// // rectnagles and pairs for testing intersections
+// private Rectangle intersectRec1;
+// private Rectangle intersectRec2;
+// private Rectangle intersectRec3;
+//
+// private KVPair<String, Rectangle> intersectPair1;
+// private KVPair<String, Rectangle> intersectPair2;
+// private KVPair<String, Rectangle> intersectPair3;
 
     /***
      * Sets up Rectangles, KVPairs and ArrayList to be
@@ -51,13 +51,13 @@ public class DatabaseTest extends TestCase {
 
         data = new Database();
 
-        invalidRec = new Rectangle(-1, -1, -1, -1);
-        validRec = new Rectangle(1, 1, 1, 1);
-        validRec2 = new Rectangle(2, 2, 2, 2);
+        invalidPt = new Point(-1, -1);
+        validPt = new Point(1, 1);
+        validPt2 = new Point(2, 2);
 
-        invalidPair = new KVPair<>("Invalid", invalidRec);
-        validPair = new KVPair<>("Valid", validRec);
-        validPair2 = new KVPair<>("Valid", validRec2);
+        invalidPair = new KVPair<>("Invalid", invalidPt);
+        validPair = new KVPair<>("Valid", validPt);
+        validPair2 = new KVPair<>("Valid", validPt2);
 
     }
 
@@ -76,7 +76,7 @@ public class DatabaseTest extends TestCase {
         String output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains(String.format("Rectangle inserted: %s\n",
+        assertTrue(output.contains(String.format("Point inserted: %s\n",
             validPair.toString())));
 
         // clear output history
@@ -89,7 +89,7 @@ public class DatabaseTest extends TestCase {
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains(String.format("Rectangle rejected: %s\n",
+        assertTrue(output.contains(String.format("Point rejected: %s\n",
             invalidPair.toString())));
     }
 
@@ -113,7 +113,7 @@ public class DatabaseTest extends TestCase {
         String output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains(String.format("Rectangle removed: %s\n",
+        assertTrue(output.contains(String.format("Point removed: %s\n",
             validPair.toString())));
 
         // clear output history
@@ -126,7 +126,7 @@ public class DatabaseTest extends TestCase {
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains("Rectangle not found: (Valid)"));
+        assertTrue(output.contains("Point not removed: Valid"));
     }
 
 
@@ -139,78 +139,39 @@ public class DatabaseTest extends TestCase {
     @Test
     public void testRemoveByValue() {
 
-        // remove rectangle parameters in skiplist
+        // remove point parameters in skiplist
         data.insert(validPair);
-        data.remove(1, 1, 1, 1);
+        data.remove(1, 1);
 
         // sytem output
         String output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains(String.format("Rectangle removed: %s\n",
+        assertTrue(output.contains(String.format("Point removed: %s\n",
             validPair.toString())));
 
         // clear output history
         systemOut().clearHistory();
 
-        // remove rectangle parameters not in skiplist
-        data.remove(1, 1, 1, 1);
+        // remove point parameters not in skiplist
+        data.remove(1, 1);
 
         // sytem output
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains("Rectangle not found: (1, 1, 1, 1)"));
+        assertTrue(output.contains("Point not removed: (1, 1)"));
 
         // clear output history
         systemOut().clearHistory();
 
         // test removing invalid rectangle
-        data.remove(-1, -1, -1, -1);
+        data.remove(-1, -1);
 
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains("Rectangle Rejected: (-1, -1, -1, -1)\n"));
-    }
-
-
-    /***
-     * Test the search method of the database class for key in list and one not
-     * in list
-     */
-    @Test
-    public void testSearch() {
-
-        // search for keys that are in the list
-        data.insert(validPair);
-        data.insert(validPair2);
-        data.search("Valid");
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains("Rectangles found matching \"Valid\":\n"));
-
-        assertTrue(output.contains(String.format("%s\n", validPair
-            .toString())));
-
-        assertTrue(output.contains(String.format("%s\n", validPair2
-            .toString())));
-
-        // clear output history
-        systemOut().clearHistory();
-
-        // search for key that is not in the list
-        data.search("Invalid");
-
-        // sytem output
-        output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains("Rectangle not found: Invalid"));
-
+        assertTrue(output.contains("Point rejected: (-1, -1)\n"));
     }
 
 
@@ -238,187 +199,233 @@ public class DatabaseTest extends TestCase {
             .toString())));
         assertTrue(output.contains("SkipList size is: 2\n"));
 
+        assertTrue(output.contains("QuadTree dump:\n"));
+        assertTrue(output.contains("Node at 0, 0, 1024:\n"));
+        assertTrue(output.contains(String.format("%s\n", validPair
+            .toString())));
+        assertTrue(output.contains(String.format("%s\n", validPair2
+            .toString())));
+        assertTrue(output.contains("1 quadtree nodes printed\n"));
+
     }
 
 
     /***
-     * Test the regionSearch method with invlaid input height and width
+     * Test the search method of the database class for key in list and one not
+     * in list
      */
     @Test
-    public void testRegionSearchInvalid() {
+    public void testSearch() {
 
-        // test invalid search region width
-        data.regionsearch(5, 5, -1, 5);
+        // search for keys that are in the list
+        data.insert(validPair);
+        data.insert(validPair2);
+        data.search("Valid");
 
         // sytem output
         String output = systemOut().getHistory();
 
-        // verify system output
-        assertTrue(output.contains("Rectangle rejected: (5, 5, -1, 5)"));
+        assertTrue(output.contains(String.format("Found: %s\n", validPair
+            .toString())));
+
+        assertTrue(output.contains(String.format("Found: %s\n", validPair2
+            .toString())));
 
         // clear output history
         systemOut().clearHistory();
 
-        // test invalid region search height
-        data.regionsearch(5, 5, 5, -1);
+        // search for key that is not in the list
+        data.search("Invalid");
 
         // sytem output
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains("Rectangle rejected: (5, 5, 5, -1)"));
+        assertTrue(output.contains("Point not found: Invalid"));
 
     }
-
-
-    /***
-     * Test the regionSearch method with valid regions
-     */
-    @Test
-    public void testRegionSearch() {
-
-        // initialize rectangles and pairs
-        inRegionRec1 = new Rectangle(0, 0, 100, 100);
-        inRegionRec2 = new Rectangle(150, 150, 100, 100);
-        notInRegionRec = new Rectangle(700, 700, 100, 100);
-
-        inRegionPair1 = new KVPair<>("In region", inRegionRec1);
-        inRegionPair2 = new KVPair<>("In region", inRegionRec2);
-        notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
-
-        // insert two pairs in the search region and one not
-        data.insert(inRegionPair1);
-        data.insert(inRegionPair2);
-        data.insert(notInRegionPair);
-
-        // clear output history
-        systemOut().clearHistory();
-
-        // search a region that contains the inRegion pairs and does not contain
-        // notInRegionPair
-        data.regionsearch(50, 50, 150, 150);
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains(
-            "Rectangles intersecting region (50, 50, 150, 150):"));
-        assertTrue(output.contains(inRegionPair1.toString()));
-        assertTrue(output.contains(inRegionPair2.toString()));
-        // should not contain an output for not in region pair
-        assertFalse(output.contains(notInRegionPair.toString()));
-
-    }
-
-
-    /***
-     * Test the regionSearch method on empty skiplist
-     */
-    @Test
-    public void testRegionSearchEmpty() {
-
-        // valid search region
-        data.regionsearch(50, 50, 100, 100);
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains(
-            "Rectangles intersecting region (50, 50, 100, 100):"));
-
-    }
-
-
-    /***
-     * Test the regionSearch method with a region that that contains no
-     * rectangles
-     */
-    @Test
-    public void testNotInRegionSearch() {
-
-        // initialize rectangles and pairs
-        notInRegionRec = new Rectangle(700, 700, 100, 100);
-
-        notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
-
-        // insert two pairs in the search region and one not
-        data.insert(notInRegionPair);
-
-        // clear output history
-        systemOut().clearHistory();
-
-        // search a region that contains the inRegion pairs and does not contain
-        // notInRegionPair
-        data.regionsearch(50, 50, 150, 150);
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertFalse(output.contains(notInRegionPair.toString()));
-
-    }
-
-
-    /***
-     * Test the intersections method with an empty skiplist
-     */
-    @Test
-    public void testIntersectionsEmpty() {
-
-        data.intersections();
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains("Intersection pairs:"));
-
-    }
-
-
-    /***
-     * Test the intersections method with some intersecting rectangles
-     */
-    @Test
-    public void testIntersections() {
-
-        // intersects with rec2
-        intersectRec1 = new Rectangle(0, 0, 200, 200);
-        // intersects with both
-        intersectRec2 = new Rectangle(100, 100, 300, 300);
-        // intersects with rec 2
-        intersectRec3 = new Rectangle(300, 300, 200, 200);
-
-        intersectPair1 = new KVPair<>("A", intersectRec1);
-        intersectPair2 = new KVPair<>("B", intersectRec2);
-        intersectPair3 = new KVPair<>("C", intersectRec3);
-
-        // add pairs to skiplist
-        data.insert(intersectPair1);
-        data.insert(intersectPair2);
-        data.insert(intersectPair3);
-
-        // clear output history
-        systemOut().clearHistory();
-
-        // call intersections
-        data.intersections();
-
-        // sytem output
-        String output = systemOut().getHistory();
-
-        // verify system output
-        assertTrue(output.contains("Intersection pairs:"));
-        assertTrue(output.contains(String.format("%s | %s", intersectPair1
-            .toString(), intersectPair2.toString())));
-        assertTrue(output.contains(String.format("%s | %s", intersectPair2
-            .toString(), intersectPair1.toString())));
-        assertTrue(output.contains(String.format("%s | %s", intersectPair2
-            .toString(), intersectPair3.toString())));
-        assertTrue(output.contains(String.format("%s | %s", intersectPair3
-            .toString(), intersectPair2.toString())));
-    }
+//
+//
+//
+//
+// /***
+// * Test the regionSearch method with invlaid input height and width
+// */
+// @Test
+// public void testRegionSearchInvalid() {
+//
+// // test invalid search region width
+// data.regionsearch(5, 5, -1, 5);
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains("Rectangle rejected: (5, 5, -1, 5)"));
+//
+// // clear output history
+// systemOut().clearHistory();
+//
+// // test invalid region search height
+// data.regionsearch(5, 5, 5, -1);
+//
+// // sytem output
+// output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains("Rectangle rejected: (5, 5, 5, -1)"));
+//
+// }
+//
+//
+// /***
+// * Test the regionSearch method with valid regions
+// */
+// @Test
+// public void testRegionSearch() {
+//
+// // initialize rectangles and pairs
+// inRegionRec1 = new Rectangle(0, 0, 100, 100);
+// inRegionRec2 = new Rectangle(150, 150, 100, 100);
+// notInRegionRec = new Rectangle(700, 700, 100, 100);
+//
+// inRegionPair1 = new KVPair<>("In region", inRegionRec1);
+// inRegionPair2 = new KVPair<>("In region", inRegionRec2);
+// notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
+//
+// // insert two pairs in the search region and one not
+// data.insert(inRegionPair1);
+// data.insert(inRegionPair2);
+// data.insert(notInRegionPair);
+//
+// // clear output history
+// systemOut().clearHistory();
+//
+// // search a region that contains the inRegion pairs and does not contain
+// // notInRegionPair
+// data.regionsearch(50, 50, 150, 150);
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains(
+// "Rectangles intersecting region (50, 50, 150, 150):"));
+// assertTrue(output.contains(inRegionPair1.toString()));
+// assertTrue(output.contains(inRegionPair2.toString()));
+// // should not contain an output for not in region pair
+// assertFalse(output.contains(notInRegionPair.toString()));
+//
+// }
+//
+//
+// /***
+// * Test the regionSearch method on empty skiplist
+// */
+// @Test
+// public void testRegionSearchEmpty() {
+//
+// // valid search region
+// data.regionsearch(50, 50, 100, 100);
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains(
+// "Rectangles intersecting region (50, 50, 100, 100):"));
+//
+// }
+//
+//
+// /***
+// * Test the regionSearch method with a region that that contains no
+// * rectangles
+// */
+// @Test
+// public void testNotInRegionSearch() {
+//
+// // initialize rectangles and pairs
+// notInRegionRec = new Rectangle(700, 700, 100, 100);
+//
+// notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
+//
+// // insert two pairs in the search region and one not
+// data.insert(notInRegionPair);
+//
+// // clear output history
+// systemOut().clearHistory();
+//
+// // search a region that contains the inRegion pairs and does not contain
+// // notInRegionPair
+// data.regionsearch(50, 50, 150, 150);
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertFalse(output.contains(notInRegionPair.toString()));
+//
+// }
+//
+//
+// /***
+// * Test the intersections method with an empty skiplist
+// */
+// @Test
+// public void testIntersectionsEmpty() {
+//
+// data.intersections();
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains("Intersection pairs:"));
+//
+// }
+//
+//
+// /***
+// * Test the intersections method with some intersecting rectangles
+// */
+// @Test
+// public void testIntersections() {
+//
+// // intersects with rec2
+// intersectRec1 = new Rectangle(0, 0, 200, 200);
+// // intersects with both
+// intersectRec2 = new Rectangle(100, 100, 300, 300);
+// // intersects with rec 2
+// intersectRec3 = new Rectangle(300, 300, 200, 200);
+//
+// intersectPair1 = new KVPair<>("A", intersectRec1);
+// intersectPair2 = new KVPair<>("B", intersectRec2);
+// intersectPair3 = new KVPair<>("C", intersectRec3);
+//
+// // add pairs to skiplist
+// data.insert(intersectPair1);
+// data.insert(intersectPair2);
+// data.insert(intersectPair3);
+//
+// // clear output history
+// systemOut().clearHistory();
+//
+// // call intersections
+// data.intersections();
+//
+// // sytem output
+// String output = systemOut().getHistory();
+//
+// // verify system output
+// assertTrue(output.contains("Intersection pairs:"));
+// assertTrue(output.contains(String.format("%s | %s", intersectPair1
+// .toString(), intersectPair2.toString())));
+// assertTrue(output.contains(String.format("%s | %s", intersectPair2
+// .toString(), intersectPair1.toString())));
+// assertTrue(output.contains(String.format("%s | %s", intersectPair2
+// .toString(), intersectPair3.toString())));
+// assertTrue(output.contains(String.format("%s | %s", intersectPair3
+// .toString(), intersectPair2.toString())));
+// }
 }
