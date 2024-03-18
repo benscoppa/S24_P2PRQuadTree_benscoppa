@@ -3,16 +3,12 @@ import java.util.Iterator;
 
 /**
  * This class is responsible for interfacing between the command processor and
- * the SkipList. The responsibility of this class is to further interpret
- * variations of commands and do some error checking of those commands. This
- * class further interpreting the command means that the two types of remove
- * will be overloaded methods for if we are removing by name or by coordinates.
- * Many of these methods will simply call the appropriate version of the
- * SkipList method after some preparation.
- * 
- * Also note that the Database class will have a clearer role in Project2,
- * where we will have two data structures. The Database class will then
- * determine which command should be directed to which data structure.
+ * the SkipList and QuadTree. The responsibility of this class is to further
+ * interpret variations of commands and do some error checking of those
+ * commands. This class further interpreting the command means that the two
+ * types of remove will be overloaded methods for if we are removing by name or
+ * by coordinates. Many of these methods will simply call the appropriate
+ * version of the SkipList and/or QuadTree method after some preparation.
  * 
  * @author CS Staff
  * @author Ben Scoppa
@@ -28,11 +24,6 @@ public class Database {
     private SkipList<String, Point> list;
     private QuadTree tree;
 
-    // These are Iterator objects for the SkipList to loop through it from
-    // outside the class.
-    private Iterator<KVPair<String, Rectangle>> itr1;
-    private Iterator<KVPair<String, Rectangle>> itr2;
-
     /**
      * The constructor for this class initializes a SkipList object with String
      * and Rectangle a its parameters.
@@ -44,11 +35,11 @@ public class Database {
 
 
     /**
-     * Inserts the KVPair in the SkipList if the Point has valid coordinates
-     * and dimensions, that is that the coordinates are non-negative and inside
-     * of the worldbox (1024, 1024) This insert will add the KVPair specified
-     * into the sorted SkipList appropriately. It also adds the KVPair to the
-     * QuadTree.
+     * Inserts the KVPair in the SkipList and QuadTree if the Point has valid
+     * coordinates and dimensions, that is that the coordinates are non-negative
+     * and inside of the worldbox (1024, 1024) This insert will add the KVPair
+     * specified into the sorted SkipList appropriately. It also adds the KVPair
+     * to the QuadTree.
      * 
      * @param pair
      *            the KVPair to be inserted
@@ -73,7 +64,8 @@ public class Database {
     /**
      * Removes a Point with the name "name" if available. If not an error
      * message is printed to the console. Removed from both the skiplist and
-     * and the quadtree.
+     * and the quadtree. Point is first removed from the skiplist in order
+     * to get the point value to use for removinf from the quadtree.
      * 
      * @param name
      *            the name of the rectangle to be removed
@@ -99,7 +91,9 @@ public class Database {
     /**
      * Removes a point with the specified coordinates if available. If not
      * an error message is printed to the console. Remove the point from
-     * both the skiplist and quadtree.
+     * both the skiplist and quadtree. Point is removed from the quadtree
+     * first in order to get the name of the point to use for removing from
+     * the skiplist.
      * 
      * @param x
      *            x-coordinate of the point to be removed
@@ -123,8 +117,8 @@ public class Database {
         String name = tree.remove(pt, "0");
 
         // check if the remove failed and print error message if needed
-        if (name.equals("Not Found")) {
-            System.out.printf("Point not removed: (%d, %d)\n", x, y);
+        if (name.equals("0")) {
+            System.out.printf("Point not found: (%d, %d)\n", x, y);
             return;
         }
 
@@ -137,10 +131,10 @@ public class Database {
 
 
     /**
-     * Displays all the rectangles inside the specified region. The rectangle
-     * must have some area inside the area that is created by the region,
-     * meaning, Rectangles that only touch a side or corner of the region
-     * specified will not be said to be in the region.
+     * Displays all the points inside the specified region. The point
+     * must be inside the area that is created by the region rectangle,
+     * meaning, points that only touch a side or corner of the region
+     * specified will be said to be in the region.
      * 
      * @param x
      *            x-Coordinate of the region
@@ -155,39 +149,21 @@ public class Database {
 
         // check for valid height and with and print error message if needed
         if (w <= 0 || h <= 0) {
-            System.out.printf("Rectangle rejected: (%d, %d, %d, %d)%n", x, y, w,
+            System.out.printf("rectangle rejected: (%d, %d, %d, %d)\n", x, y, w,
                 h);
             return;
         }
 
-        // output header
-        System.out.printf("Rectangles intersecting region (%d, %d, %d, %d):%n",
-            x, y, w, h);
-
         // rectangle that the demensions of the search region
         Rectangle regionRec = new Rectangle(x, y, w, h);
 
-        // use an iterator to iterate through the skiplist
-        // itr1 = list.iterator();
-
-        // iterate through the list
-        while (itr1.hasNext()) {
-            // get the rectangle at each list location
-            KVPair<String, Rectangle> currentPair = itr1.next();
-            Rectangle currentRect = currentPair.getValue();
-
-            // check if the rectangle intersects the search region and print the
-            // KVPair if it does intersect
-            if (currentRect.intersect(regionRec)) {
-                System.out.printf("%s%n", currentPair.toString());
-            }
-        }
+        // call regionsearch on the QuadTree
+        tree.regionSearch(regionRec);
     }
 
 
     /**
      * Prints out all of the duplicate points within the QuadTree.
-     * 
      */
     public void duplicates() {
 

@@ -1,16 +1,12 @@
 import java.util.LinkedList;
 
 /**
- * This class holds QuadTree class which handles the head of the QuadTree and
- * TODO finish JavaDoc
+ * This class holds QuadTree class which handles the root of the QuadTree
+ * calling all the QuadNode methods on the root and keeping track of the root.
  * 
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <String>
- *            The name of the point
- * @param <Point>
- *            The actual point
  */
 public class QuadTree {
 
@@ -81,21 +77,49 @@ public class QuadTree {
         nodeCount = root.dump(ROOT_LEVEL, worldParams);
         System.out.printf("%d quadtree nodes printed\n", nodeCount);
     }
-    
-    
+
+
     /**
-     * Calls the duplicates method on the QuadTree heaad node.
+     * Calls the duplicates method on the QuadTree head node.
      */
     public void duplicates() {
-        
+
         System.out.printf("Duplicate points:\n");
         root.duplicates();
     }
-    
-    public LinkedList<KVPair<String, Point>> regionSearch(Rectangle searchRegion) {
-        
-        LinkedList<KVPair<String, Point>> pointsInRegion = root.regionSearch(searchRegion, worldParams);
-        return pointsInRegion;
+
+
+    /**
+     * Calls the regionSearch method on the QuadTree head node.
+     * 
+     * * @param searchRegion
+     * a rectangle object that contains the region to be saerched
+     */
+    public void regionSearch(Rectangle searchRegion) {
+
+        System.out.printf("Points intersecting region %s:\n", searchRegion
+            .toString());
+
+        RegionSearchResult searchResult = root.regionSearch(searchRegion,
+            worldParams);
+
+        LinkedList<KVPair<String, Point>> pointsInRegion = searchResult
+            .getRegionPoints();
+
+        int nodesVisited = searchResult.getVisitedNodes();
+
+        if (pointsInRegion.isEmpty()) {
+            System.out.printf("%d quadtree nodes visited\n", nodesVisited);
+            return;
+        }
+
+        // iterate through points in the region
+        for (KVPair<String, Point> currentPair : pointsInRegion) {
+            System.out.printf("Point found: %s\n", currentPair.toString());
+        }
+
+        System.out.printf("%d quadtree nodes visited\n", nodesVisited);
+
     }
 
 }

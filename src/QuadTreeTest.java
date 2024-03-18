@@ -8,8 +8,6 @@ import student.TestCase;
 
 /**
  * This Class test the methods of the QuadTree class ensuring the work properly.
- * This includes insert,
- * TODO finish javaDoc
  * 
  * @author Ben Scoppa
  * @version 3/16/2024
@@ -21,6 +19,7 @@ public class QuadTreeTest extends TestCase {
     private final ByteArrayOutputStream outContent =
         new ByteArrayOutputStream();
 
+    // point objects
     private Point p1;
     private Point p2;
     private Point p3;
@@ -35,6 +34,10 @@ public class QuadTreeTest extends TestCase {
     private Point p12;
     private Point p13;
 
+    // rectange object for regionSearch
+    private Rectangle region;
+
+    // KVPair objects with a name and point value
     private KVPair<String, Point> p1Pair;
     private KVPair<String, Point> p2Pair;
     private KVPair<String, Point> p3Pair;
@@ -51,7 +54,7 @@ public class QuadTreeTest extends TestCase {
 
     /**
      * Sets up Points, KVPairs and QuadTree to be used for testing along with
-     * the output for debuging
+     * the output for debuging and a rectangle for regionSearch.
      */
     @Before
     public void setUp() {
@@ -182,7 +185,7 @@ public class QuadTreeTest extends TestCase {
         assertEquals("p10", tree.remove(p10, "0"));
 
         // attempt to remove a point not in the tree
-        assertEquals("Not Found", tree.remove(p3, "0"));
+        assertEquals("0", tree.remove(p3, "0"));
 
         tree.dump();
 
@@ -249,8 +252,7 @@ public class QuadTreeTest extends TestCase {
 
 
     /**
-     * Check that more than three points can be added to a region as long as
-     * they are the same point
+     * Test the duplicates method of the QuadTree interface.
      */
     @Test
     public void testDuplicates() {
@@ -271,6 +273,40 @@ public class QuadTreeTest extends TestCase {
 
         // expected output
         String expectedOutput = "Duplicate points:\n" + "(1, 2)\n";
+
+        // make sure expected output matches the real output
+        assertFuzzyEquals(expectedOutput, outContent.toString());
+    }
+
+
+    /**
+     * Test the regionSearch method of the QuadTree interface.
+     */
+    @Test
+    public void testRegionSearch() {
+
+        region = new Rectangle(300, 300, 600, 600);
+
+        tree.insert(p1Pair);
+        tree.insert(p2Pair);
+        tree.insert(p3Pair);
+        tree.insert(p4Pair);
+        tree.insert(p5Pair);
+        tree.insert(p6Pair);
+        tree.insert(p7Pair);
+        tree.insert(p8Pair);
+        tree.insert(p9Pair);
+        tree.insert(p10Pair);
+        tree.insert(p11Pair);
+
+        tree.regionSearch(region);
+
+        // expected output
+        String expectedOutput =
+            "points intersecting region (300, 300, 600, 600):\n"
+                + "Point found: (p7, 400, 400)\n"
+                + "Point found: (p8, 500, 500)\n"
+                + "Point found: (p11, 900, 900)\n" + "6 quadtree nodes visited";
 
         // make sure expected output matches the real output
         assertFuzzyEquals(expectedOutput, outContent.toString());

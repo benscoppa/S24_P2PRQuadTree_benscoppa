@@ -24,23 +24,23 @@ public class DatabaseTest extends TestCase {
     private KVPair<String, Point> validPair;
     private KVPair<String, Point> validPair2;
 
-// // rectangles and pairs for testing searchRegion
-// private Rectangle inRegionRec1;
-// private Rectangle inRegionRec2;
-// private Rectangle notInRegionRec;
-//
-// private KVPair<String, Rectangle> inRegionPair1;
-// private KVPair<String, Rectangle> inRegionPair2;
-// private KVPair<String, Rectangle> notInRegionPair;
-//
-// // rectnagles and pairs for testing intersections
-// private Rectangle intersectRec1;
-// private Rectangle intersectRec2;
-// private Rectangle intersectRec3;
-//
-// private KVPair<String, Rectangle> intersectPair1;
-// private KVPair<String, Rectangle> intersectPair2;
-// private KVPair<String, Rectangle> intersectPair3;
+    // rectangles and pairs for testing searchRegion
+    private Point inRegionPt1;
+    private Point inRegionPt2;
+    private Point notInRegionPt;
+
+    private KVPair<String, Point> inRegionPair1;
+    private KVPair<String, Point> inRegionPair2;
+    private KVPair<String, Point> notInRegionPair;
+
+    // rectangles and pairs for testing duplicates
+    private Point duplicatesPt1;
+    private Point duplicatesPt2;
+    private Point duplicatesPt3;
+
+    private KVPair<String, Point> duplicatesPair1;
+    private KVPair<String, Point> duplicatesPair2;
+    private KVPair<String, Point> duplicatesPair3;
 
     /***
      * Sets up Rectangles, KVPairs and ArrayList to be
@@ -160,7 +160,7 @@ public class DatabaseTest extends TestCase {
         output = systemOut().getHistory();
 
         // verify system output
-        assertTrue(output.contains("Point not removed: (1, 1)"));
+        assertTrue(output.contains("Point not found: (1, 1)"));
 
         // clear output history
         systemOut().clearHistory();
@@ -244,188 +244,177 @@ public class DatabaseTest extends TestCase {
         assertTrue(output.contains("Point not found: Invalid"));
 
     }
-//
-//
-//
-//
-// /***
-// * Test the regionSearch method with invlaid input height and width
-// */
-// @Test
-// public void testRegionSearchInvalid() {
-//
-// // test invalid search region width
-// data.regionsearch(5, 5, -1, 5);
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains("Rectangle rejected: (5, 5, -1, 5)"));
-//
-// // clear output history
-// systemOut().clearHistory();
-//
-// // test invalid region search height
-// data.regionsearch(5, 5, 5, -1);
-//
-// // sytem output
-// output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains("Rectangle rejected: (5, 5, 5, -1)"));
-//
-// }
-//
-//
-// /***
-// * Test the regionSearch method with valid regions
-// */
-// @Test
-// public void testRegionSearch() {
-//
-// // initialize rectangles and pairs
-// inRegionRec1 = new Rectangle(0, 0, 100, 100);
-// inRegionRec2 = new Rectangle(150, 150, 100, 100);
-// notInRegionRec = new Rectangle(700, 700, 100, 100);
-//
-// inRegionPair1 = new KVPair<>("In region", inRegionRec1);
-// inRegionPair2 = new KVPair<>("In region", inRegionRec2);
-// notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
-//
-// // insert two pairs in the search region and one not
-// data.insert(inRegionPair1);
-// data.insert(inRegionPair2);
-// data.insert(notInRegionPair);
-//
-// // clear output history
-// systemOut().clearHistory();
-//
-// // search a region that contains the inRegion pairs and does not contain
-// // notInRegionPair
-// data.regionsearch(50, 50, 150, 150);
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains(
-// "Rectangles intersecting region (50, 50, 150, 150):"));
-// assertTrue(output.contains(inRegionPair1.toString()));
-// assertTrue(output.contains(inRegionPair2.toString()));
-// // should not contain an output for not in region pair
-// assertFalse(output.contains(notInRegionPair.toString()));
-//
-// }
-//
-//
-// /***
-// * Test the regionSearch method on empty skiplist
-// */
-// @Test
-// public void testRegionSearchEmpty() {
-//
-// // valid search region
-// data.regionsearch(50, 50, 100, 100);
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains(
-// "Rectangles intersecting region (50, 50, 100, 100):"));
-//
-// }
-//
-//
-// /***
-// * Test the regionSearch method with a region that that contains no
-// * rectangles
-// */
-// @Test
-// public void testNotInRegionSearch() {
-//
-// // initialize rectangles and pairs
-// notInRegionRec = new Rectangle(700, 700, 100, 100);
-//
-// notInRegionPair = new KVPair<>("Not in region", notInRegionRec);
-//
-// // insert two pairs in the search region and one not
-// data.insert(notInRegionPair);
-//
-// // clear output history
-// systemOut().clearHistory();
-//
-// // search a region that contains the inRegion pairs and does not contain
-// // notInRegionPair
-// data.regionsearch(50, 50, 150, 150);
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertFalse(output.contains(notInRegionPair.toString()));
-//
-// }
-//
-//
-// /***
-// * Test the intersections method with an empty skiplist
-// */
-// @Test
-// public void testIntersectionsEmpty() {
-//
-// data.intersections();
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains("Intersection pairs:"));
-//
-// }
-//
-//
-// /***
-// * Test the intersections method with some intersecting rectangles
-// */
-// @Test
-// public void testIntersections() {
-//
-// // intersects with rec2
-// intersectRec1 = new Rectangle(0, 0, 200, 200);
-// // intersects with both
-// intersectRec2 = new Rectangle(100, 100, 300, 300);
-// // intersects with rec 2
-// intersectRec3 = new Rectangle(300, 300, 200, 200);
-//
-// intersectPair1 = new KVPair<>("A", intersectRec1);
-// intersectPair2 = new KVPair<>("B", intersectRec2);
-// intersectPair3 = new KVPair<>("C", intersectRec3);
-//
-// // add pairs to skiplist
-// data.insert(intersectPair1);
-// data.insert(intersectPair2);
-// data.insert(intersectPair3);
-//
-// // clear output history
-// systemOut().clearHistory();
-//
-// // call intersections
-// data.intersections();
-//
-// // sytem output
-// String output = systemOut().getHistory();
-//
-// // verify system output
-// assertTrue(output.contains("Intersection pairs:"));
-// assertTrue(output.contains(String.format("%s | %s", intersectPair1
-// .toString(), intersectPair2.toString())));
-// assertTrue(output.contains(String.format("%s | %s", intersectPair2
-// .toString(), intersectPair1.toString())));
-// assertTrue(output.contains(String.format("%s | %s", intersectPair2
-// .toString(), intersectPair3.toString())));
-// assertTrue(output.contains(String.format("%s | %s", intersectPair3
-// .toString(), intersectPair2.toString())));
-// }
+
+
+    /***
+     * Test the regionSearch method with invlaid input height and width
+     */
+    @Test
+    public void testRegionSearchInvalid() {
+
+        // test invalid search region width
+        data.regionsearch(5, 5, -1, 5);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("rectangle rejected: (5, 5, -1, 5)"));
+
+        // clear output history
+        systemOut().clearHistory();
+
+        // test invalid region search height
+        data.regionsearch(5, 5, 5, -1);
+
+        // sytem output
+        output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("rectangle rejected: (5, 5, 5, -1)"));
+
+    }
+
+
+    /***
+     * Test the regionSearch method with valid regions
+     */
+    @Test
+    public void testRegionSearch() {
+
+        // initialize rectangles and pairs
+        inRegionPt1 = new Point(0, 0);
+        inRegionPt2 = new Point(150, 150);
+        notInRegionPt = new Point(700, 700);
+
+        inRegionPair1 = new KVPair<>("In region", inRegionPt1);
+        inRegionPair2 = new KVPair<>("In region", inRegionPt2);
+        notInRegionPair = new KVPair<>("Not in region", notInRegionPt);
+
+        // insert two pairs in the search region and one not
+        data.insert(inRegionPair1);
+        data.insert(inRegionPair2);
+        data.insert(notInRegionPair);
+
+        // clear output history
+        systemOut().clearHistory();
+
+        // search a region that contains the inRegion pairs and does not contain
+        // notInRegionPair
+        data.regionsearch(0, 0, 150, 150);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Points intersecting region 0, 0, 150, 150:"));
+        assertTrue(output.contains(inRegionPair1.toString()));
+        assertTrue(output.contains(inRegionPair2.toString()));
+        // should not contain an output for not in region pair
+        assertFalse(output.contains(notInRegionPair.toString()));
+
+    }
+
+
+    /***
+     * Test the regionSearch method on empty skiplist
+     */
+    @Test
+    public void testRegionSearchEmpty() {
+
+        // valid search region
+        data.regionsearch(50, 50, 100, 100);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains(
+            "Points intersecting region 50, 50, 100, 100:"));
+
+    }
+
+
+    /***
+     * Test the regionSearch method with a region that that contains no
+     * rectangles
+     */
+    @Test
+    public void testNotInRegionSearch() {
+
+        // initialize rectangles and pairs
+        notInRegionPt = new Point(700, 700);
+
+        notInRegionPair = new KVPair<>("Not in region", notInRegionPt);
+
+        // insert two pairs in the search region and one not
+        data.insert(notInRegionPair);
+
+        // clear output history
+        systemOut().clearHistory();
+
+        // search a region that contains the inRegion pairs and does not contain
+        // notInRegionPair
+        data.regionsearch(50, 50, 150, 150);
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertFalse(output.contains(notInRegionPair.toString()));
+
+    }
+
+
+    /***
+     * Test the duplicates method with an empty skiplist
+     */
+    @Test
+    public void testDuplicatesEmpty() {
+
+        data.duplicates();
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("Duplicate points:"));
+
+    }
+
+
+    /***
+     * Test the intersections method with some intersecting rectangles
+     */
+    @Test
+    public void testDuplicates() {
+
+        // three dupliacte points
+        duplicatesPt1 = new Point(0, 0);
+        duplicatesPt2 = new Point(0, 0);
+        duplicatesPt3 = new Point(0, 0);
+
+        duplicatesPair1 = new KVPair<>("A", duplicatesPt1);
+        duplicatesPair2 = new KVPair<>("B", duplicatesPt2);
+        duplicatesPair3 = new KVPair<>("C", duplicatesPt3);
+
+        // add pairs to skiplist and quadtree
+        data.insert(duplicatesPair1);
+        data.insert(duplicatesPair2);
+        data.insert(duplicatesPair3);
+
+        // clear output history
+        systemOut().clearHistory();
+
+        // call intersections
+        data.duplicates();
+
+        // sytem output
+        String output = systemOut().getHistory();
+
+        // verify system output
+        assertTrue(output.contains("Duplicate points:"));
+        assertTrue(output.contains(duplicatesPt1.toString()));
+    }
 }

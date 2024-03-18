@@ -2,16 +2,16 @@ import java.util.LinkedList;
 
 /**
  * This class holds the base QuadNode interface which is inherited by the type
- * specific node classes. It contains an insert,
- * TODO finish javadoc
+ * specific node classes. It contains an insert method which hanldes insearting
+ * a QuadNode into a QuadTree. The dump method which prints string output
+ * decribing the structure of th tree. Remove removes a KVPair from the
+ * QuadTree. getPoints gets all the point from a nodes children and their
+ * children. duplicates prints all the duplicate points in the QuadTree.
+ * regionSearch gets all of the points in the QuadTree within a region.
  * 
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <String>
- *            The name of the point
- * @param <Point>
- *            The actual point
  */
 public interface QuadNode {
 
@@ -85,8 +85,9 @@ public interface QuadNode {
      * @param params
      *            object that stores the parameters of of the region
      * 
-     * @return a linked list of all the points in the search region
+     * @return regionSearchResult contains the points in the search region and
+     *         the number of points visited
      */
-    LinkedList<KVPair<String, Point>> regionSearch(Rectangle searchRegion, Params params);
+    RegionSearchResult regionSearch(Rectangle searchRegion, Params params);
 
 }

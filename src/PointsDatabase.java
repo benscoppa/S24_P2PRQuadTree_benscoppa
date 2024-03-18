@@ -23,26 +23,33 @@ import java.util.Scanner;
  */
 
 /**
- * This program implements a skiplist that stores rectangles as a key
- * value pair. This class creates command processor object and reads
- * in an input file to input commands. The command processor determines
- * the command that was read. The commands are insert which adds a
- * rectangle to the skiplist. remove which is called by name (key)
- * or by value and remove the rectangle from the skiplist if found.
- * regionsearch which prints out the rectangles that are found inside
- * the specified region. intersections which outputs all the
- * intersecting rectangles in the skiplist. search which prints all
- * the rectangles with a specified key. Last is dump which prints
- * the depth of each node and its value. Database acts as the interface
- * between the command processor and the skiplist. The skiplist is
- * design to work on all KVPairs not just rectangles. Therefore region
- * search and intersections are handled in database as well as printing
- * results to the console. Skiplist is the actual skiplist that works
- * on all KVPairs. KVPair handles creating and retriving key and value
- * from KVPairs. The Rectngle class hangles the rectangle objects and
- * determining if rectangles are equal or intersect. All of these classes
- * also have test classes that test all of the methods inside them to
- * ensure they work properly.
+ * This program implements a database that uses a skiplist and a quadtree
+ * that both individually store points as a key value pair. This class creates
+ * command processor object and reads in an input file to input commands. The
+ * command processor determines the command that was read. The commands are
+ * insert which adds apoint to the skiplist and the quadtree. remove which is
+ * called by name (key) or by value and removes the rectangle from the skiplist
+ * and quadtree if found. regionsearch which prints out the points that are
+ * found inside the specified region rectangle. duplicates which outputs all the
+ * duplicate points in the quadtree. search which prints all the rectangles with
+ * a specified key using the skiplist. Last is dump which prints the depth of
+ * each node and its value for the skiplist and the nodes of the quadtree with
+ * information, formatting or level and the number of nodes. Database acts as
+ * the interface between the command processor and the skiplist and quadtree.
+ * The skiplist is design to work on all KVPairs not just point however the
+ * quadtree only works on string, point KVPairs. Skiplist is the actual skiplist
+ * that works on all KVPairs. QuadTree is the quadtree that handles the root of
+ * the quadtree. QuadNode is an interface for the three types of quadnodes,
+ * empty node which is a flyweight, internal node which has four children and no
+ * data and leaf node which can hold up to three points. KVPair handles creating
+ * and retriving key and value from KVPairs. The Rectngle class hangles the
+ * rectangle objects and determining if rectangles are equal or intersect.
+ * The Point class handles the creation od points and determining if they are
+ * equal or in a region. RemoveResult is a return class used by the remove
+ * method in the quadtree. RegionSearchResult is a return class used by the
+ * regionSearch method in the quadtree. All of these classes also have test
+ * classes that test all of the methods inside them to ensure they work
+ * properly.
  */
 
 /**

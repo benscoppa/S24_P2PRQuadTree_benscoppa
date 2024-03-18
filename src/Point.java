@@ -156,4 +156,31 @@ public class Point {
 
         return !(yCoordinate > y + size);
     }
+
+
+    /**
+     * Checks if the point is inside the region of a rectangle object.
+     * 
+     * @param region
+     *            the rectangle object to check if the point is in
+     * 
+     * @return true if the point is inside the region, false if not
+     */
+    public boolean inRegionRectangle(Rectangle region) {
+
+        // check all sides of the region to see if the point is in the region
+        if (xCoordinate < region.getxCoordinate()) {
+            return false;
+        }
+
+        else if (yCoordinate < region.getyCoordinate()) {
+            return false;
+        }
+
+        else if (xCoordinate > region.getxCoordinate() + region.getWidth()) {
+            return false;
+        }
+
+        return !(yCoordinate > region.getyCoordinate() + region.getHeight());
+    }
 }

@@ -8,16 +8,17 @@ import student.TestCase;
  * @author Ben Scoppa
  * @version 3/15/2024
  */
-public class ParamsTest extends TestCase{
-    
+public class ParamsTest extends TestCase {
+
     private Params params;
-    
+
     /**
      * Sets up the objects and initalizes them to their values
      */
     public void setUp() {
         params = new Params(1, 2, 3);
     }
+
 
     /**
      * test the getX function
@@ -37,7 +38,8 @@ public class ParamsTest extends TestCase{
         assertEquals(params.getY(), 2);
 
     }
-    
+
+
     /**
      * test the getSize function
      */

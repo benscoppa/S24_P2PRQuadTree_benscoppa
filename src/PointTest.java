@@ -30,16 +30,18 @@ public class PointTest extends TestCase {
 
     private Point tooDown;
     private Point touchingDown;
-    
+
     // test points not in region and edge cases
     private Point leftRegion;
     private Point aboveRegion;
-    
+
     private Point rightRegion;
     private Point touchingRightRegion;
 
     private Point belowRegion;
     private Point touchingBottomRegion;
+
+    private Rectangle region;
 
     /**
      * Sets up the point objects and initalizes them to their values
@@ -143,7 +145,7 @@ public class PointTest extends TestCase {
      * region
      */
     public void testInRegion() {
-        
+
         // test points outside of region and edge cases
         leftRegion = new Point(1, 15);
         assertFalse(leftRegion.inRegion(10, 10, 10));
@@ -162,5 +164,35 @@ public class PointTest extends TestCase {
 
         touchingBottomRegion = new Point(15, 20);
         assertTrue(touchingBottomRegion.inRegion(10, 10, 10));
+    }
+
+
+    /**
+     * test the inRegionrectangle function for points that violate are and are
+     * not in the region
+     */
+    public void testInRegionRectangle() {
+
+        // initialize the region rectangle
+        region = new Rectangle(10, 10, 10, 10);
+
+        // test points outside of region and edge cases
+        leftRegion = new Point(1, 15);
+        assertFalse(leftRegion.inRegionRectangle(region));
+
+        aboveRegion = new Point(15, 1);
+        assertFalse(aboveRegion.inRegionRectangle(region));
+
+        rightRegion = new Point(40, 15);
+        assertFalse(rightRegion.inRegionRectangle(region));
+
+        touchingRightRegion = new Point(20, 15);
+        assertTrue(touchingRightRegion.inRegionRectangle(region));
+
+        belowRegion = new Point(15, 40);
+        assertFalse(belowRegion.inRegionRectangle(region));
+
+        touchingBottomRegion = new Point(15, 20);
+        assertTrue(touchingBottomRegion.inRegionRectangle(region));
     }
 }

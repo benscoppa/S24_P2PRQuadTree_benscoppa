@@ -2,17 +2,11 @@
 import java.util.LinkedList;
 
 /**
- * This class handles Leaf nodes of the QuadTree. In overrides the methods
- * insert,
- * TODO finish javaDoc
+ * This class handles Leaf nodes of the QuadTree. It overrides its methods.
  * 
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <String>
- *            The name of the point
- * @param <Point>
- *            The actual point
  */
 public class LeafNode implements QuadNode {
 
@@ -60,8 +54,8 @@ public class LeafNode implements QuadNode {
                 InternalNode newInternalNode = new InternalNode();
 
                 // insert each point from the region into the new internal node
-                for (KVPair<String, Point> KVPair : region) {
-                    newInternalNode.insert(KVPair, params);
+                for (KVPair<String, Point> currentPair : region) {
+                    newInternalNode.insert(currentPair, params);
                 }
 
                 return newInternalNode;
@@ -192,18 +186,18 @@ public class LeafNode implements QuadNode {
 
         // outer loop that getas a pair from the region
         for (KVPair<String, Point> currentPair : region) {
-            
+
             // make sure the duplicate wasnt already printed
             if (printedDuplicates.contains(currentPair.getValue())) {
                 continue;
             }
-            
+
             // compare this pair to every other point in the region
             for (KVPair<String, Point> comparePair : region) {
                 // if the values are duplicate but it is not itself
                 if (currentPair.getValue().equals(comparePair.getValue())
                     && !currentPair.equals(comparePair)) {
-                    
+
                     // add to list of duplicate points
                     printedDuplicates.add(currentPair.getValue());
 
@@ -217,6 +211,44 @@ public class LeafNode implements QuadNode {
 
         // return itself recursivly
         return this;
+    }
+
+
+    /**
+     * When regionSearch is called on a leaf node return a linked list
+     * containing all of the points inside of the search region.
+     * 
+     * @param searchRegion
+     *            a rectangle object that contains the region to search for
+     *            points in within the QuadTree.
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return an empty linked list
+     */
+    @Override
+    public RegionSearchResult regionSearch(
+        Rectangle searchRegion,
+        Params params) {
+
+        LinkedList<KVPair<String, Point>> regionPoints = new LinkedList<>();
+
+        // iterate through points in this region
+        for (KVPair<String, Point> currentPair : region) {
+
+            // if the point is in the search region add to region points list
+            if (currentPair.getValue().inRegionRectangle(searchRegion)) {
+                regionPoints.add(currentPair);
+            }
+        }
+
+        // return the points in the search region for this region and one node
+        // visited
+        int node = 1;
+
+        RegionSearchResult result = new RegionSearchResult(regionPoints, node);
+
+        return result;
     }
 
 }

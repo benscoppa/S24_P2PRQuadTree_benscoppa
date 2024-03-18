@@ -1,17 +1,11 @@
 import java.util.LinkedList;
 
 /**
- * This class handles Empty nodes of the QuadTree. In overrides the methods
- * insert,
- * TODO finish javaDoc
+ * This class handles Empty nodes of the QuadTree. It overrides its methods.
  * 
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <String>
- *            The name of the point
- * @param <Point>
- *            The actual point
  */
 public class EmptyNode implements QuadNode {
 
@@ -98,7 +92,7 @@ public class EmptyNode implements QuadNode {
     @Override
     public RemoveResult remove(Point pt, Params params, String name) {
 
-        RemoveResult result = new RemoveResult(this, "Not Found");
+        RemoveResult result = new RemoveResult(this, "0");
         return result;
     }
 
@@ -111,8 +105,8 @@ public class EmptyNode implements QuadNode {
     @Override
     public LinkedList<KVPair<String, Point>> getPoints() {
 
-        LinkedList<KVPair<String, Point>> points = new LinkedList<>();
-        return points;
+        LinkedList<KVPair<String, Point>> empty = new LinkedList<>();
+        return empty;
     }
 
 
@@ -126,5 +120,32 @@ public class EmptyNode implements QuadNode {
     public QuadNode duplicates() {
 
         return this;
+    }
+
+
+    /**
+     * When regionSearch is called on an empty returns an empty linked list
+     * since there are no points in the empty node.
+     * 
+     * @param searchRegion
+     *            a rectangle object that contains the region to search for
+     *            points in within the QuadTree.
+     * @param params
+     *            object that stores the parameters of of the region
+     * 
+     * @return regionSearchResult an empty linked list and one node visited
+     */
+    @Override
+    public RegionSearchResult regionSearch(
+        Rectangle searchRegion,
+        Params params) {
+
+        LinkedList<KVPair<String, Point>> empty = new LinkedList<>();
+
+        int node = 1;
+
+        RegionSearchResult result = new RegionSearchResult(empty, node);
+
+        return result;
     }
 }

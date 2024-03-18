@@ -1,23 +1,20 @@
 import java.util.LinkedList;
 
 /**
- * This class handles Internal nodes of the QuadTree. In overrides the methods
- * insert,
- * TODO finish javaDoc
+ * This class handles Internal nodes of the QuadTree. overriding its methods.
  * 
  * @author Ben Scoppa
  * 
  * @version 2024-03-15
- * @param <String>
- *            The name of the point
- * @param <Point>
- *            The actual point
  */
 public class InternalNode implements QuadNode {
 
     // QuadNodes that represent the four quadrants and children of the internal
     // node.
-    private QuadNode nw, ne, sw, se;
+    private QuadNode nw;
+    private QuadNode ne;
+    private QuadNode sw;
+    private QuadNode se;
 
     /**
      * Creates an internal node and initializes its children to empty nodes.
@@ -293,10 +290,11 @@ public class InternalNode implements QuadNode {
      * @param params
      *            object that stores the parameters of of the region
      * 
-     * @return a linked list of all the points in the search region
+     * @return regionSearchResult contains the points in the search region and
+     *         the number of points visited
      */
     @Override
-    public LinkedList<KVPair<String, Point>> regionSearch(
+    public RegionSearchResult regionSearch(
         Rectangle searchRegion,
         Params params) {
 
@@ -322,44 +320,57 @@ public class InternalNode implements QuadNode {
         // stores all the intersect points covered by the internal node
         LinkedList<KVPair<String, Point>> allPoints = new LinkedList<>();
 
+        // integer keeps track of visited nodes
+        int visitedNodes = 0;
+
         // determine the approprite child nodes to call regionSearch on then get
         // the region parameters for that child
         // also adds the points in the region within the child to the list of
-        // all points in the internal node.
+        // all points in the internal node and the number of nodes visited.
         if (searchRegion.intersect(nwRec)) {
 
             Params newParams = new Params(topLeftX, topLeftY, newRegionSize);
-            LinkedList<KVPair<String, Point>> nwPoints = nw.regionSearch(
-                searchRegion, newParams);
-            allPoints.addAll(nwPoints);
+            RegionSearchResult nwRegion = nw.regionSearch(searchRegion,
+                newParams);
+            allPoints.addAll(nwRegion.getRegionPoints());
+            visitedNodes += nwRegion.getVisitedNodes();
         }
 
         if (searchRegion.intersect(neRec)) {
 
             Params newParams = new Params(middleX, topLeftY, newRegionSize);
-            LinkedList<KVPair<String, Point>> nePoints = ne.regionSearch(
-                searchRegion, newParams);
-            allPoints.addAll(nePoints);
+            RegionSearchResult neRegion = ne.regionSearch(searchRegion,
+                newParams);
+            allPoints.addAll(neRegion.getRegionPoints());
+            visitedNodes += neRegion.getVisitedNodes();
         }
 
         if (searchRegion.intersect(swRec)) {
 
             Params newParams = new Params(topLeftX, middleY, newRegionSize);
-            LinkedList<KVPair<String, Point>> swPoints = sw.regionSearch(
-                searchRegion, newParams);
-            allPoints.addAll(swPoints);
+            RegionSearchResult swRegion = sw.regionSearch(searchRegion,
+                newParams);
+            allPoints.addAll(swRegion.getRegionPoints());
+            visitedNodes += swRegion.getVisitedNodes();
         }
 
         if (searchRegion.intersect(seRec)) {
 
             Params newParams = new Params(middleX, middleY, newRegionSize);
-            LinkedList<KVPair<String, Point>> sePoints = se.regionSearch(
-                searchRegion, newParams);
-            allPoints.addAll(sePoints);
+            RegionSearchResult seRegion = se.regionSearch(searchRegion,
+                newParams);
+            allPoints.addAll(seRegion.getRegionPoints());
+            visitedNodes += seRegion.getVisitedNodes();
         }
+
+        // add 1 for visiting this internal node
+        visitedNodes += 1;
 
         // return all the points in the search region covered by this internal
         // node.
-        return allPoints;
+        RegionSearchResult result = new RegionSearchResult(allPoints,
+            visitedNodes);
+
+        return result;
     }
 }
