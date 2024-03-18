@@ -312,4 +312,40 @@ public class QuadTreeTest extends TestCase {
         assertFuzzyEquals(expectedOutput, outContent.toString());
     }
 
+
+    /**
+     * Test the regionSearch method of the QuadTree interface where no points
+     * are in the region.
+     */
+    @Test
+    public void testRegionSearchNotFound() {
+
+        region = new Rectangle(2000, 2000, 600, 600);
+
+        tree.insert(p1Pair);
+        tree.insert(p2Pair);
+        tree.insert(p3Pair);
+        tree.insert(p4Pair);
+        tree.insert(p5Pair);
+        tree.insert(p6Pair);
+        tree.insert(p7Pair);
+        tree.insert(p8Pair);
+        tree.insert(p9Pair);
+        tree.insert(p10Pair);
+        tree.insert(p11Pair);
+
+        tree.regionSearch(region);
+
+        // expected output
+        String expectedOutput =
+            "points intersecting region (2000, 2000, 600, 600):\n"
+                + "1 quadtree nodes visited";
+
+        // make sure expected output matches the real output
+        assertFuzzyEquals(expectedOutput, outContent.toString());
+
+        // make sure no points are found
+        assertFalse(outContent.toString().contains("Point found:"));
+    }
+
 }
